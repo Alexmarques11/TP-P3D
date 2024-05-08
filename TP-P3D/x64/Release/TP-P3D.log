@@ -1,8 +1,10 @@
 ﻿  Source.cpp
-C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\Source.cpp(43,19): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-  Generating code
-  0 of 178 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  TP-P3D.vcxproj -> C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\x64\Release\TP-P3D.exe
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(43,28): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(57,30): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
+  Table.cpp
+  Gerando código
+  76 of 168 functions (45.2%) were compiled, the rest were copied from previous compilation.
+    3 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Finalizada a geração de código
+  TP-P3D.vcxproj -> C:\Users\andre\source\repos\TP-P3D\x64\Release\TP-P3D.exe
