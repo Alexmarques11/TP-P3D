@@ -1,5 +1,8 @@
-﻿  Source.cpp
-C:\Users\Utilizador\Documents\Programacao\3D\TP_3D\TP-P3D\Source.cpp(43,19): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-  LINK : C:\Users\Utilizador\Documents\Programacao\3D\TP_3D\x64\Debug\TP-P3D.exe not found or not built by the last incremental link; performing full link
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  TP-P3D.vcxproj -> C:\Users\Utilizador\Documents\Programacao\3D\TP_3D\x64\Debug\TP-P3D.exe
+﻿  Camera.cpp
+  PoolBall.cpp
+  Source.cpp
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(44,28): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(58,30): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
+  Table.cpp
+  Gerando Código...
+..\..\..\..\Downloads\P3D-TP\P3D-TP\PoolBalls\Ball1.obj : fatal error LNK1107: arquivo inválido ou corrompido: não é possível ler em 0xB629F

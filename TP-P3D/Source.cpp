@@ -16,6 +16,7 @@
 
 #include "Utils.h"
 #include "Table.h"
+#include "PoolBall.cpp"
 #include "Camera.h"
 
 Camera camera;
@@ -91,7 +92,6 @@ void renderTable(Table table, glm::mat4 mvp) {
 
 
 int main(void) {
-
 	// Inicialização do GLFW
 	if (!glfwInit()) {
 		std::cerr << "Erro ao inicializar o GLFW" << std::endl;

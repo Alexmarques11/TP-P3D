@@ -1,10 +1,9 @@
-﻿  Source.cpp
-C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(43,28): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
-C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(57,30): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
-  Table.cpp
+﻿  PoolBall.cpp
+  Source.cpp
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(44,28): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(58,30): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
   Gerando código
-  76 of 168 functions (45.2%) were compiled, the rest were copied from previous compilation.
-    3 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  Compiler switch has changed, fall back to full compilation.
+  All 168 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finalizada a geração de código
   TP-P3D.vcxproj -> C:\Users\andre\source\repos\TP-P3D\x64\Release\TP-P3D.exe
