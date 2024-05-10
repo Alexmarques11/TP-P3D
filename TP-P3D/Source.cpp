@@ -6,9 +6,12 @@
 
 #include <Windows.h>
 
+#include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <gl\GL.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include <glm/glm.hpp> // vec3, vec4, ivec4, mat4, ...
 #include <glm/gtc/matrix_transform.hpp> // translate, rotate, scale, perspective, ...
@@ -108,6 +111,12 @@ int main(void) {
 
 	// Tornar a janela GLFW atual
 	glfwMakeContextCurrent(window);
+
+	// Inicializar o GLEW após criar o contexto OpenGL
+	if (glewInit() != GLEW_OK) {
+		std::cerr << "Erro ao inicializar o GLEW" << std::endl;
+		return -1;
+	}
 
 	// Inicializar o OpenGL
 	initOpenGL();
