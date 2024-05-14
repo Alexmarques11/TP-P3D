@@ -128,15 +128,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="LoadObj.cpp" />
+    <ClCompile Include="Ball.cpp" />
     <ClCompile Include="LoadShaders.cpp" />
-    <ClCompile Include="PoolBall.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Table.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="LoadObj.h" />
+    <ClInclude Include="Ball.h" />
     <ClInclude Include="LoadShaders.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Table.h" />

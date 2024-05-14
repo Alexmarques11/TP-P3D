@@ -13,19 +13,15 @@
 #include <GLFW\glfw3.h>
 #include <gl\GL.h>
 
-#include "LoadShaders.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "Utils.h"
+#include "Ball.h"
+#include "Table.h"
+#include "Camera.h"
 
 #include <glm/glm.hpp> // vec3, vec4, ivec4, mat4, ...
 #include <glm/gtc/matrix_transform.hpp> // translate, rotate, scale, perspective, ...
 #include <glm/gtc/type_ptr.hpp> // value_ptr
 
-#include "Utils.h"
-#include "Table.h"
-#include "PoolBall.cpp"
-#include "Camera.h"
 
 Camera camera;
 
@@ -74,7 +70,6 @@ void cursorPositionCallback(GLFWwindow* window, double xoffset, double yoffset) 
 * \param mvp
 */
 void renderTable(Table table, glm::mat4 mvp) {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	float* vertex_stream = static_cast<float*>(glm::value_ptr(table.getVertices().front()));
 	std::vector<glm::vec3> colors = table.getColors();
@@ -97,6 +92,53 @@ void renderTable(Table table, glm::mat4 mvp) {
 	}
 	glEnd();
 }
+
+
+/**
+void renderBall(Ball ball, glm::mat4 mvp) {
+
+	std::vector<glm::vec3> vertices = ball.getVertices();
+	std::vector<unsigned int> indices = ball.getVertexIndices();
+
+	// Desenha os triângulos da bola
+	glBegin(GL_TRIANGLES);
+	for (size_t i = 0; i < indices.size(); ++i) {
+		glm::vec4 vertex = glm::vec4(vertices[indices[i]], 1.0f);
+		glm::vec4 transformed_vertex = mvp * vertex;
+		glm::vec4 normalized_vertex = transformed_vertex / transformed_vertex.w;
+		glVertex3f(normalized_vertex.x, normalized_vertex.y, normalized_vertex.z);
+	}
+	glEnd();
+}
+*/
+
+
+void renderBall(Ball ball, glm::mat4 mvp) {
+	std::vector<glm::vec3> vertices = ball.getVertices();
+	std::vector<glm::vec2> uvs = ball.uvs;
+	std::vector<unsigned int> indices = ball.getVertexIndices();
+	std::unordered_map<std::string, Material> materials = ball.getMaterials();
+
+	glBegin(GL_TRIANGLES);
+	for (size_t i = 0; i < indices.size(); ++i) {
+		unsigned int vertexIndex = indices[i];
+		glm::vec3 vertex = vertices[vertexIndex];
+		glm::vec2 uv = uvs[vertexIndex];
+		std::string materialName = ball.getCurrentMaterial();
+		Material material = materials[materialName];
+
+		//log material diffuse
+		//std::cout << "Material Diffuse: " << material.diffuse.r << " " << material.diffuse.g << " " << material.diffuse.b << std::endl;
+
+		//glColor3f(material.diffuse.r, material.diffuse.g, material.diffuse.b);
+		glm::vec4 transformed_vertex = mvp * glm::vec4(vertex, 1.0f);
+		glm::vec4 normalized_vertex = transformed_vertex / transformed_vertex.w;
+		glVertex3f(normalized_vertex.x, normalized_vertex.y, normalized_vertex.z);
+	}
+	glEnd();
+}
+
+
 
 
 int main(void) {
@@ -126,14 +168,19 @@ int main(void) {
 
 	// Carregar a mesa
 	Table table;
+	Ball ball("PoolBalls/Ball1.obj");
 
 	while (!glfwWindowShouldClose(window)) {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// MVP
 		glm::mat4 mvp = camera.getMvp();
 
-		// Renderizar o modelo
+		// Renderizar a mesa
 		renderTable(table, mvp);
+
+		// Renderizar a bola
+		renderBall(ball, mvp);
 
 		// Troca os buffers e verifica eventos
 		glfwSwapBuffers(window);

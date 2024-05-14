@@ -1,9 +1,11 @@
-﻿  LoadObj.cpp
+﻿  Source.cpp
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(48,28): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(62,30): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
 MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflita com uso de outras bibliotecas; use /NODEFAULTLIB:library
   Gerando código
-  0 of 285 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  36 of 857 functions ( 4.2%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    16 functions had inline decision re-evaluated but remain unchanged
   Finalizada a geração de código
 glew32s.lib(glew.obj) : warning LNK4099: PDB '' não foi encontrado 'glew32s.lib(glew.obj)' ou no ''; vinculando objeto quando quando sem nenhuma informação de depuração
   TP-P3D.vcxproj -> C:\Users\andre\source\repos\TP-P3D\x64\Release\TP-P3D.exe
