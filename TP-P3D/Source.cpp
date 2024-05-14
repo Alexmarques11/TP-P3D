@@ -13,6 +13,7 @@
 #include <GLFW\glfw3.h>
 #include <gl\GL.h>
 
+#include "LoadShaders.h"
 #include "Utils.h"
 #include "Ball.h"
 #include "Table.h"
@@ -93,52 +94,81 @@ void renderTable(Table table, glm::mat4 mvp) {
 	glEnd();
 }
 
+/**  
+void renderBall(Ball& ball, glm::mat4 mvp, GLuint program) {
 
-/**
-void renderBall(Ball ball, glm::mat4 mvp) {
+	// Ativar o programa de shader
+	glUseProgram(program);
 
-	std::vector<glm::vec3> vertices = ball.getVertices();
-	std::vector<unsigned int> indices = ball.getVertexIndices();
+	// Passar a matriz MVP para o shader
+	GLuint mvpLocation = glGetUniformLocation(program, "mvp");
+	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvp));
 
-	// Desenha os triângulos da bola
-	glBegin(GL_TRIANGLES);
-	for (size_t i = 0; i < indices.size(); ++i) {
-		glm::vec4 vertex = glm::vec4(vertices[indices[i]], 1.0f);
-		glm::vec4 transformed_vertex = mvp * vertex;
-		glm::vec4 normalized_vertex = transformed_vertex / transformed_vertex.w;
-		glVertex3f(normalized_vertex.x, normalized_vertex.y, normalized_vertex.z);
-	}
-	glEnd();
+	// Vincular o VAO da bola
+	glBindVertexArray(ball.vao);
+
+	// Ativar e vincular a textura
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, ball.currentMaterial->diffuseTexture);
+	GLuint diffuseLocation = glGetUniformLocation(program, "diffuseTexture");
+	glUniform1i(diffuseLocation, 0);
+
+	// Desenhar a bola
+	glDrawElements(GL_TRIANGLES, ball.vertexIndices.size(), GL_UNSIGNED_INT, 0);
+
+	// Desvincular o VAO
+	glBindVertexArray(0);
+
+	// Desativar o programa de shader
+	glUseProgram(0);
+
+}*/
+
+void renderBall(Ball& ball, glm::mat4 mvp, GLuint program) {
+	// Ativar o programa de shader
+	glUseProgram(program);
+
+	// Passar as matrizes MVP para o shader
+	GLuint modelLoc = glGetUniformLocation(program, "model");
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f))); // Assuming no model transformation for now
+
+	GLuint viewLoc = glGetUniformLocation(program, "view");
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(camera.getViewMatrix()));
+
+	GLuint projectionLoc = glGetUniformLocation(program, "projection");
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(camera.getProjection()));
+
+	// Passar informações do material para o shader
+	GLuint materialAmbientLoc = glGetUniformLocation(program, "material.ambient");
+	glUniform3fv(materialAmbientLoc, 1, glm::value_ptr(ball.currentMaterial->ambient));
+
+	GLuint materialDiffuseLoc = glGetUniformLocation(program, "material.diffuse");
+	glUniform3fv(materialDiffuseLoc, 1, glm::value_ptr(ball.currentMaterial->diffuse));
+
+	GLuint materialSpecularLoc = glGetUniformLocation(program, "material.specular");
+	glUniform3fv(materialSpecularLoc, 1, glm::value_ptr(ball.currentMaterial->specular));
+
+	GLuint materialShininessLoc = glGetUniformLocation(program, "material.shininess");
+	glUniform1f(materialShininessLoc, ball.currentMaterial->shininess);
+
+	// Vincular o VAO da bola
+	glBindVertexArray(ball.vao);
+
+	// Ativar e vincular a textura
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, ball.currentMaterial->diffuseTexture);
+	GLuint diffuseLocation = glGetUniformLocation(program, "diffuseTexture");
+	glUniform1i(diffuseLocation, 0);
+
+	// Desenhar a bola
+	glDrawElements(GL_TRIANGLES, ball.vertexIndices.size(), GL_UNSIGNED_INT, 0);
+
+	// Desvincular o VAO
+	glBindVertexArray(0);
+
+	// Desativar o programa de shader
+	glUseProgram(0);
 }
-*/
-
-
-void renderBall(Ball ball, glm::mat4 mvp) {
-	std::vector<glm::vec3> vertices = ball.getVertices();
-	std::vector<glm::vec2> uvs = ball.uvs;
-	std::vector<unsigned int> indices = ball.getVertexIndices();
-	std::unordered_map<std::string, Material> materials = ball.getMaterials();
-
-	glBegin(GL_TRIANGLES);
-	for (size_t i = 0; i < indices.size(); ++i) {
-		unsigned int vertexIndex = indices[i];
-		glm::vec3 vertex = vertices[vertexIndex];
-		glm::vec2 uv = uvs[vertexIndex];
-		std::string materialName = ball.getCurrentMaterial();
-		Material material = materials[materialName];
-
-		//log material diffuse
-		//std::cout << "Material Diffuse: " << material.diffuse.r << " " << material.diffuse.g << " " << material.diffuse.b << std::endl;
-
-		//glColor3f(material.diffuse.r, material.diffuse.g, material.diffuse.b);
-		glm::vec4 transformed_vertex = mvp * glm::vec4(vertex, 1.0f);
-		glm::vec4 normalized_vertex = transformed_vertex / transformed_vertex.w;
-		glVertex3f(normalized_vertex.x, normalized_vertex.y, normalized_vertex.z);
-	}
-	glEnd();
-}
-
-
 
 
 int main(void) {
@@ -159,8 +189,29 @@ int main(void) {
 	// Tornar a janela GLFW atual
 	glfwMakeContextCurrent(window);
 
+	// Inicialização do GLEW
+	glewExperimental = GL_TRUE;
+	GLenum err = glewInit();
+	if (err != GLEW_OK) {
+		std::cerr << "Erro ao inicializar o GLEW: " << glewGetErrorString(err) << std::endl;
+		return -1;
+	}
+
 	// Inicializar o OpenGL
 	initOpenGL();
+
+	// Carregar os shaders
+	ShaderInfo shaders[] = {
+	{ GL_VERTEX_SHADER, "Shaders/texture.vert" },
+	{ GL_FRAGMENT_SHADER, "Shaders/texture.frag" },
+	{ GL_NONE, NULL }
+	};
+
+	GLuint shaderProgram = LoadShaders(shaders);
+	if (shaderProgram == 0) {
+		std::cerr << "Erro ao carregar shaders" << std::endl;
+		return -1;
+	}
 
 	// Definir callbacks para eventos de input
 	glfwSetScrollCallback(window, scrollCallback);
@@ -180,7 +231,7 @@ int main(void) {
 		renderTable(table, mvp);
 
 		// Renderizar a bola
-		renderBall(ball, mvp);
+		renderBall(ball, mvp, shaderProgram);
 
 		// Troca os buffers e verifica eventos
 		glfwSwapBuffers(window);
