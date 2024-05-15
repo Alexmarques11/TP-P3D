@@ -29,7 +29,7 @@ Camera camera;
 /**
 * \brief Função para inicializar o OpenGL
 */
-void initOpenGL() {
+void init(void) {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Define a cor de fundo
 	glEnable(GL_DEPTH_TEST); // Habilita o teste de profundidade para renderização 3D
 
@@ -40,7 +40,7 @@ void initOpenGL() {
 
 /**
 * \brief Função de callback para eventos de rolagem do mouse
-* 
+*
 * \param window
 * \param xoffset
 * \param yoffset
@@ -84,17 +84,17 @@ void renderTable(Table table, glm::mat4 mvp) {
 
 		// Cálculo das coordenadas de recorte
 		glm::vec4 transformed_vertex = mvp * vertex;
-		
+
 		// Divisão de Perspetiva
 		glm::vec4 normalized_vertex = transformed_vertex / transformed_vertex.w;
-		
+
 		// Desenho do vértice
 		glVertex3f(normalized_vertex.x, normalized_vertex.y, normalized_vertex.z);
 	}
 	glEnd();
 }
 
-/**  
+/**
 void renderBall(Ball& ball, glm::mat4 mvp, GLuint program) {
 
 	// Ativar o programa de shader
@@ -124,32 +124,13 @@ void renderBall(Ball& ball, glm::mat4 mvp, GLuint program) {
 
 }*/
 
-void renderBall(Ball& ball, glm::mat4 mvp, GLuint program) {
+void renderBall(const Ball& ball, glm::mat4 mvp, GLuint program) {
 	// Ativar o programa de shader
 	glUseProgram(program);
 
-	// Passar as matrizes MVP para o shader
-	GLuint modelLoc = glGetUniformLocation(program, "model");
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f))); // Assuming no model transformation for now
-
-	GLuint viewLoc = glGetUniformLocation(program, "view");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(camera.getViewMatrix()));
-
-	GLuint projectionLoc = glGetUniformLocation(program, "projection");
-	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(camera.getProjection()));
-
-	// Passar informações do material para o shader
-	GLuint materialAmbientLoc = glGetUniformLocation(program, "material.ambient");
-	glUniform3fv(materialAmbientLoc, 1, glm::value_ptr(ball.currentMaterial->ambient));
-
-	GLuint materialDiffuseLoc = glGetUniformLocation(program, "material.diffuse");
-	glUniform3fv(materialDiffuseLoc, 1, glm::value_ptr(ball.currentMaterial->diffuse));
-
-	GLuint materialSpecularLoc = glGetUniformLocation(program, "material.specular");
-	glUniform3fv(materialSpecularLoc, 1, glm::value_ptr(ball.currentMaterial->specular));
-
-	GLuint materialShininessLoc = glGetUniformLocation(program, "material.shininess");
-	glUniform1f(materialShininessLoc, ball.currentMaterial->shininess);
+	// Passar a matriz MVP para o shader
+	GLuint mvpLocation = glGetUniformLocation(program, "MVP");
+	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvp));
 
 	// Vincular o VAO da bola
 	glBindVertexArray(ball.vao);
@@ -165,6 +146,26 @@ void renderBall(Ball& ball, glm::mat4 mvp, GLuint program) {
 
 	// Desvincular o VAO
 	glBindVertexArray(0);
+
+	// Desativar o programa de shader
+	glUseProgram(0);
+}
+
+
+// Função para renderizar todas as bolas em cima da mesa
+void renderBalls(const std::vector<Ball>& balls, Table table, glm::mat4 tableMvp, GLuint program) {
+	// Ativar o programa de shader
+	glUseProgram(program);
+
+	// Passar a matriz MVP para o shader
+	GLuint mvpLocation = glGetUniformLocation(program, "MVP");
+	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(tableMvp));
+
+	// Iterar sobre todas as bolas
+	for (const auto& ball : balls) {
+		glm::mat4 ballMvp = camera.getBallMvp(ball, table);
+		renderBall(ball, ballMvp, program);
+	}
 
 	// Desativar o programa de shader
 	glUseProgram(0);
@@ -198,7 +199,7 @@ int main(void) {
 	}
 
 	// Inicializar o OpenGL
-	initOpenGL();
+	init();
 
 	// Carregar os shaders
 	ShaderInfo shaders[] = {
@@ -219,19 +220,27 @@ int main(void) {
 
 	// Carregar a mesa
 	Table table;
-	Ball ball("PoolBalls/Ball1.obj");
+	// Ball ball("PoolBalls/Ball1.obj");
+
+	// Carregar as bolas
+	std::vector<Ball> balls;
+	for (int i = 1; i <= 15; ++i) {
+		glm::vec3 initialPosition = table.getRandomPositionOnTable();
+		std::string ballPath = "PoolBalls/Ball" + std::to_string(i) + ".obj";
+		balls.emplace_back(ballPath, initialPosition);
+	}
 
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// MVP
-		glm::mat4 mvp = camera.getMvp();
+		// MVPs
+		glm::mat4 tableMvp = camera.getTableMvp();
 
 		// Renderizar a mesa
-		renderTable(table, mvp);
+		renderTable(table, tableMvp);
 
-		// Renderizar a bola
-		renderBall(ball, mvp, shaderProgram);
+		// Renderizar as bolas
+		renderBalls(balls, table, tableMvp, shaderProgram);
 
 		// Troca os buffers e verifica eventos
 		glfwSwapBuffers(window);

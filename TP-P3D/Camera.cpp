@@ -20,7 +20,7 @@ glm::mat4 Camera::getViewMatrix() const {
 }
 
 // get Mvp
-glm::mat4 Camera::getMvp() const {
+glm::mat4 Camera::getTableMvp() const {
 	
     glm::mat4 view = getViewMatrix();
     glm::mat4 projection = getProjection();
@@ -31,6 +31,21 @@ glm::mat4 Camera::getMvp() const {
 
 	glm::mat4 mvp = projection * view * modelMatrix;
 	return mvp;
+}
+
+
+glm::mat4 Camera::getBallMvp(const Ball& ball, const Table& table) const {
+    float ballYPosition = ball.getHeight() + table.getHeight() - 5.0f;
+
+    glm::mat4 view = getViewMatrix();
+    glm::mat4 projection = getProjection();
+
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::translate(view, glm::vec3(ball.position.x, ballYPosition, ball.position.z));
+    modelMatrix = glm::rotate(modelMatrix, angle, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)));
+
+    glm::mat4 mvp = projection * view * modelMatrix;
+    return mvp;
 }
 
 

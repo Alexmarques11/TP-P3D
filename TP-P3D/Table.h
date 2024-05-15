@@ -12,6 +12,7 @@
 
 #include <vector>
 #include <glm/glm.hpp>
+#include "Utils.h"
 
 class Table {
 public:
@@ -20,6 +21,8 @@ public:
 
     std::vector<glm::vec3> getVertices() const;
     std::vector<glm::vec3> getColors() const;
+    float getHeight() const;
+    glm::vec3 getRandomPositionOnTable() const;
 
 private:
     std::vector<glm::vec3> vertices;

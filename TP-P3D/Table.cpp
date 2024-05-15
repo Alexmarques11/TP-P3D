@@ -75,3 +75,31 @@ std::vector<glm::vec3> Table::getVertices() const {
 std::vector<glm::vec3> Table::getColors() const {
     return colors;
 }
+
+float Table::getHeight() const {
+    // Altura máxima da mesa
+    float max_height = 0.0f;
+
+    for (const auto& vertex : vertices) {
+        if (vertex.y > max_height) {
+            max_height = vertex.y;
+        }
+    }
+
+    return max_height;
+}
+
+glm::vec3 Table::getRandomPositionOnTable() const {
+    // Largura e comprimento da mesa
+    float tableWidth = 18.0f;
+    float tableLength = 11.0f;
+
+    // Gerar coordenadas aleatórias dentro dos limites da mesa
+    float randomX = getRandomValue(-tableWidth / 2.0f, tableWidth / 2.0f);
+    float randomZ = getRandomValue(-tableLength / 2.0f, tableLength / 2.0f);
+
+    // A altura da posição será a altura máxima da mesa
+    float randomY = getHeight();
+
+    return glm::vec3(randomX, randomY, randomZ);
+}

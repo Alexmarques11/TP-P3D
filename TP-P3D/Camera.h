@@ -2,6 +2,8 @@
 #define CAMERA_H
 
 #include "Utils.h"
+#include "Ball.h"
+#include "Table.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -19,7 +21,8 @@ public:
     // Retorna a matriz de visualização da câmera
     glm::mat4 getViewMatrix() const;
 
-    glm::mat4 getMvp() const;
+    glm::mat4 getTableMvp() const;
+    glm::mat4 getBallMvp(const Ball& ball, const Table& table) const;
 
     // Processa o movimento do mouse para orientar a câmera
     void processMouseMovement(float xoffset, bool isLeftMouseButtonPressed);
