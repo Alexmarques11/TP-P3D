@@ -8,7 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 // Define os valores padrão para a câmera
-const float ZOOM = 12.0f;
+const float ZOOM = 20.0f;
 const float ANGLE = 0.0f;
 
 class Camera {

@@ -1,24 +1,18 @@
-﻿  Ball.cpp
-  Camera.cpp
-  Source.cpp
-C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(49,28): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
-C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(63,30): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
-C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(145,76): warning C4267: 'argumento': conversão de 'size_t' para 'GLsizei', possível perda de dados
-  Table.cpp
-MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflita com uso de outras bibliotecas; use /NODEFAULTLIB:library
-  Gerando código
-  22 of 748 functions ( 2.9%) were compiled, the rest were copied from previous compilation.
-    7 functions were new in current compilation
-    54 functions had inline decision re-evaluated but remain unchanged
-  Finalizada a geração de código
-glew32s.lib(glew.obj) : warning LNK4099: PDB '' não foi encontrado 'glew32s.lib(glew.obj)' ou no ''; vinculando objeto quando quando sem nenhuma informação de depuração
-LINK : warning LNK4286: o símbolo '__glewDeleteBuffers' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
-LINK : warning LNK4286: o símbolo '__glewGenBuffers' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
-LINK : warning LNK4286: o símbolo '__glewGenVertexArrays' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
-LINK : warning LNK4286: o símbolo '__glewBufferData' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
-LINK : warning LNK4286: o símbolo '__glewDeleteVertexArrays' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
-LINK : warning LNK4286: o símbolo '__glewBindBuffer' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
-LINK : warning LNK4286: o símbolo '__glewVertexAttribPointer' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
-LINK : warning LNK4286: o símbolo '__glewBindVertexArray' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
-LINK : warning LNK4286: o símbolo '__glewEnableVertexAttribArray' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
-  TP-P3D.vcxproj -> C:\Users\andre\source\repos\TP-P3D\x64\Release\TP-P3D.exe
+﻿  Camera.cpp
+MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+  4 of 748 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    8 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+glew32s.lib(glew.obj) : warning LNK4099: PDB '' was not found with 'glew32s.lib(glew.obj)' or at ''; linking object as if no debug info
+LINK : warning LNK4286: symbol '__glewDeleteBuffers' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
+LINK : warning LNK4286: symbol '__glewGenBuffers' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
+LINK : warning LNK4286: symbol '__glewGenVertexArrays' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
+LINK : warning LNK4286: symbol '__glewBufferData' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
+LINK : warning LNK4286: symbol '__glewDeleteVertexArrays' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
+LINK : warning LNK4286: symbol '__glewBindBuffer' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
+LINK : warning LNK4286: symbol '__glewVertexAttribPointer' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
+LINK : warning LNK4286: symbol '__glewBindVertexArray' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
+LINK : warning LNK4286: symbol '__glewEnableVertexAttribArray' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
+  TP-P3D.vcxproj -> C:\Users\Utilizador\Documents\Programacao\3D\TP_3D\x64\Release\TP-P3D.exe

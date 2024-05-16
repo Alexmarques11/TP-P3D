@@ -12,7 +12,7 @@ glm::mat4 Camera::getProjection() const {
 
 glm::mat4 Camera::getViewMatrix() const {
     glm::mat4 view = glm::lookAt(
-        glm::vec3(0.0f, 0.0f, zoom),	// Posição da câmara no mundo
+        glm::vec3(0.0f, 5.0f, zoom),	// Posição da câmara no mundo
         glm::vec3(0.0f, 0.0f, -1.0f),	// Direção para a qual a câmara esta apontada
         glm::vec3(0.0f, 1.0f, 0.0f)		// Vector vertical
     );

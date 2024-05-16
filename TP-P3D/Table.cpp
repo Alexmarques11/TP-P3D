@@ -16,40 +16,40 @@
 Table::Table() {
     vertices = {
         // Frente
-        glm::vec3(-9.0f, -0.5f,  5.5f),
-        glm::vec3(9.0f, -0.5f,  5.5f),
-        glm::vec3(9.0f,  0.5f,  5.5f),
-        glm::vec3(-9.0f,  0.5f,  5.5f),
+        glm::vec3(-15.0f, -1.0f,  12.0f),
+        glm::vec3(15.0f, -1.0f,  12.0f),
+        glm::vec3(15.0f,  1.0f,  12.0f),
+        glm::vec3(-15.0f,  1.0f,  12.0f),
 
         // Trás
-        glm::vec3(-9.0f, -0.5f, -5.5f),
-        glm::vec3(-9.0f,  0.5f, -5.5f),
-        glm::vec3(9.0f,  0.5f, -5.5f),
-        glm::vec3(9.0f, -0.5f, -5.5f),
+        glm::vec3(-15.0f, -1.0f, -12.0f),
+        glm::vec3(-15.0f,  1.0f, -12.0f),
+        glm::vec3(15.0f,  1.0f, -12.0f),
+        glm::vec3(15.0f, -1.0f, -12.0f),
 
         // Direita
-        glm::vec3(9.0f, -0.5f,  5.5f),
-        glm::vec3(9.0f, -0.5f, -5.5f),
-        glm::vec3(9.0f,  0.5f, -5.5f),
-        glm::vec3(9.0f,  0.5f,  5.5f),
+        glm::vec3(15.0f, -1.0f,  12.0f),
+        glm::vec3(15.0f, -1.0f, -12.0f),
+        glm::vec3(15.0f,  1.0f, -12.0f),
+        glm::vec3(15.0f,  1.0f,  12.0f),
 
         // Esquerda
-        glm::vec3(-9.0f, -0.5f,  5.5f),
-        glm::vec3(-9.0f,  0.5f,  5.5f),
-        glm::vec3(-9.0f,  0.5f, -5.5f),
-        glm::vec3(-9.0f, -0.5f, -5.5f),
+        glm::vec3(-15.0f, -1.0f,  12.0f),
+        glm::vec3(-15.0f,  1.0f,  12.0f),
+        glm::vec3(-15.0f,  1.0f, -12.0f),
+        glm::vec3(-15.0f, -1.0f, -12.0f),
 
         // Cima
-        glm::vec3(-9.0f,  0.5f,  5.5f),
-        glm::vec3(9.0f,  0.5f,  5.5f),
-        glm::vec3(9.0f,  0.5f, -5.5f),
-        glm::vec3(-9.0f,  0.5f, -5.5f),
+        glm::vec3(-15.0f,  1.0f,  12.0f),
+        glm::vec3(15.0f,  1.0f,  12.0f),
+        glm::vec3(15.0f,  1.0f, -12.0f),
+        glm::vec3(-15.0f,  1.0f, -12.0f),
 
         // Baixo
-        glm::vec3(-9.0f, -0.5f,  5.5f),
-        glm::vec3(-9.0f, -0.5f, -5.5f),
-        glm::vec3(9.0f, -0.5f, -5.5f),
-        glm::vec3(9.0f, -0.5f,  5.5f)
+        glm::vec3(-15.0f, -1.0f,  12.0f),
+        glm::vec3(-15.0f, -1.0f, -12.0f),
+        glm::vec3(15.0f, -1.0f, -12.0f),
+        glm::vec3(15.0f, -1.0f,  12.0f)
     };
 
     colors = {
