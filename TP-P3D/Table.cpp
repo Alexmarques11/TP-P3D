@@ -16,40 +16,40 @@
 Table::Table() {
     vertices = {
         // Frente
-        glm::vec3(-15.0f, -1.0f,  12.0f),
-        glm::vec3(15.0f, -1.0f,  12.0f),
-        glm::vec3(15.0f,  1.0f,  12.0f),
-        glm::vec3(-15.0f,  1.0f,  12.0f),
+        glm::vec3(-15.0f, -1.0f,  9.0f),
+        glm::vec3(15.0f, -1.0f,  9.0f),
+        glm::vec3(15.0f,  1.0f,  9.0f),
+        glm::vec3(-15.0f,  1.0f,  9.0f),
 
         // Trás
-        glm::vec3(-15.0f, -1.0f, -12.0f),
-        glm::vec3(-15.0f,  1.0f, -12.0f),
-        glm::vec3(15.0f,  1.0f, -12.0f),
-        glm::vec3(15.0f, -1.0f, -12.0f),
+        glm::vec3(-15.0f, -1.0f, -9.0f),
+        glm::vec3(-15.0f,  1.0f, -9.0f),
+        glm::vec3(15.0f,  1.0f, -9.0f),
+        glm::vec3(15.0f, -1.0f, -9.0f),
 
         // Direita
-        glm::vec3(15.0f, -1.0f,  12.0f),
-        glm::vec3(15.0f, -1.0f, -12.0f),
-        glm::vec3(15.0f,  1.0f, -12.0f),
-        glm::vec3(15.0f,  1.0f,  12.0f),
+        glm::vec3(15.0f, -1.0f,  9.0f),
+        glm::vec3(15.0f, -1.0f, -9.0f),
+        glm::vec3(15.0f,  1.0f, -9.0f),
+        glm::vec3(15.0f,  1.0f,  9.0f),
 
         // Esquerda
-        glm::vec3(-15.0f, -1.0f,  12.0f),
-        glm::vec3(-15.0f,  1.0f,  12.0f),
-        glm::vec3(-15.0f,  1.0f, -12.0f),
-        glm::vec3(-15.0f, -1.0f, -12.0f),
+        glm::vec3(-15.0f, -1.0f,  9.0f),
+        glm::vec3(-15.0f,  1.0f,  9.0f),
+        glm::vec3(-15.0f,  1.0f, -9.0f),
+        glm::vec3(-15.0f, -1.0f, -9.0f),
 
         // Cima
-        glm::vec3(-15.0f,  1.0f,  12.0f),
-        glm::vec3(15.0f,  1.0f,  12.0f),
-        glm::vec3(15.0f,  1.0f, -12.0f),
-        glm::vec3(-15.0f,  1.0f, -12.0f),
+        glm::vec3(-15.0f,  1.0f,  9.0f),
+        glm::vec3(15.0f,  1.0f,  9.0f),
+        glm::vec3(15.0f,  1.0f, -9.0f),
+        glm::vec3(-15.0f,  1.0f, -9.0f),
 
         // Baixo
-        glm::vec3(-15.0f, -1.0f,  12.0f),
-        glm::vec3(-15.0f, -1.0f, -12.0f),
-        glm::vec3(15.0f, -1.0f, -12.0f),
-        glm::vec3(15.0f, -1.0f,  12.0f)
+        glm::vec3(-15.0f, -1.0f,  9.0f),
+        glm::vec3(-15.0f, -1.0f, -9.0f),
+        glm::vec3(15.0f, -1.0f, -9.0f),
+        glm::vec3(15.0f, -1.0f,  9.0f)
     };
 
     colors = {
@@ -91,8 +91,8 @@ float Table::getHeight() const {
 
 glm::vec3 Table::getRandomPositionOnTable() const {
     // Largura e comprimento da mesa
-    float tableWidth = 18.0f;
-    float tableLength = 11.0f;
+    float tableWidth = 26.0f;
+    float tableLength = 15.0f;
 
     // Gerar coordenadas aleatórias dentro dos limites da mesa
     float randomX = getRandomValue(-tableWidth / 2.0f, tableWidth / 2.0f);
