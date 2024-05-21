@@ -202,15 +202,27 @@ int main(void) {
 	init();
 
 	// Carregar os shaders
-	ShaderInfo shaders[] = {
+	ShaderInfo textureShaders[] = {
 	{ GL_VERTEX_SHADER, "Shaders/texture.vert" },
 	{ GL_FRAGMENT_SHADER, "Shaders/texture.frag" },
 	{ GL_NONE, NULL }
 	};
 
-	GLuint shaderProgram = LoadShaders(shaders);
-	if (shaderProgram == 0) {
-		std::cerr << "Erro ao carregar shaders" << std::endl;
+	GLuint textureShaderProgram = LoadShaders(textureShaders);
+	if (textureShaderProgram == 0) {
+		std::cerr << "Erro ao carregar texture shaders" << std::endl;
+		return -1;
+	}
+
+	ShaderInfo lightShaders[] = {
+	{ GL_VERTEX_SHADER, "Shaders/texture.vert" },
+	{ GL_FRAGMENT_SHADER, "Shaders/texture.frag" },
+	{ GL_NONE, NULL }
+	};
+
+	GLuint lightShaderProgram = LoadShaders(lightShaders);
+	if (lightShaderProgram == 0) {
+		std::cerr << "Erro ao carregar light shaders" << std::endl;
 		return -1;
 	}
 
@@ -240,7 +252,7 @@ int main(void) {
 		renderTable(table, tableMvp);
 
 		// Renderizar as bolas
-		renderBalls(balls, table, tableMvp, shaderProgram);
+		renderBalls(balls, table, tableMvp, textureShaderProgram);
 
 		// Troca os buffers e verifica eventos
 		glfwSwapBuffers(window);

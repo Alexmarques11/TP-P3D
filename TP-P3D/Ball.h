@@ -2,21 +2,12 @@
 #define BALL_H
 
 #include "Utils.h"
+#include "Material.h"
 #include <string>
 #include <vector>
 #include <glm/glm.hpp>
 #include <unordered_map>
 #include <GL/glew.h>
-
-struct Material {
-    std::string name;
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
-    float shininess;
-    std::string diffuseTexturePath;
-    GLuint diffuseTexture;
-};
 
 class Ball {
 public:

@@ -22,7 +22,6 @@ Ball::~Ball() {
     glDeleteVertexArrays(1, &vao);
 }
 
-
 void Ball::loadOBJ(const std::string& path) {
     std::ifstream file(path);
     if (!file.is_open()) {
@@ -173,6 +172,8 @@ void Ball::setupBuffers() {
 
     // Desvincula o VAO para evitar modificações acidentais
     glBindVertexArray(0);
+
+
 }
 
 

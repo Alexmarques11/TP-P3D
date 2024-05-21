@@ -1,9 +1,14 @@
-﻿  Table.cpp
+﻿  Camera.cpp
+  Ball.cpp
+  Source.cpp
+C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\Source.cpp(49,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\Source.cpp(63,30): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\Source.cpp(145,54): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
 MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  0 of 748 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  1 of 750 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    8 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 glew32s.lib(glew.obj) : warning LNK4099: PDB '' was not found with 'glew32s.lib(glew.obj)' or at ''; linking object as if no debug info
 LINK : warning LNK4286: symbol '__glewDeleteBuffers' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
@@ -15,4 +20,4 @@ LINK : warning LNK4286: symbol '__glewBindBuffer' defined in 'glew32s.lib(glew.o
 LINK : warning LNK4286: symbol '__glewVertexAttribPointer' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
 LINK : warning LNK4286: symbol '__glewBindVertexArray' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
 LINK : warning LNK4286: symbol '__glewEnableVertexAttribArray' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj'
-  TP-P3D.vcxproj -> C:\Users\Utilizador\Documents\Programacao\3D\TP_3D\x64\Release\TP-P3D.exe
+  TP-P3D.vcxproj -> C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\x64\Release\TP-P3D.exe
