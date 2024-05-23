@@ -128,22 +128,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Ball.cpp" />
-    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Lights.cpp" />
     <ClCompile Include="LoadShaders.cpp" />
+    <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Table.cpp" />
-    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Ball.h" />
-    <ClInclude Include="Light.h" />
+    <ClInclude Include="Lights.h" />
     <ClInclude Include="LoadShaders.h" />
-    <ClInclude Include="Material.h" />
+    <ClInclude Include="Ball.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Table.h" />
-    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

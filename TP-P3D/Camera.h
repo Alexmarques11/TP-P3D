@@ -1,38 +1,35 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "Utils.h"
-#include "Ball.h"
-#include "Table.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-// Define os valores padrão para a câmera
-const float ZOOM = 20.0f;
-const float ANGLE = 0.0f;
+#include <glm/gtc/type_ptr.hpp>
+#include <GLFW/glfw3.h>
 
 class Camera {
+
 public:
-    // Construtor com vetores de posição e orientação customizados
-    Camera(float zoom = ZOOM, float angle = ANGLE);
+    // Variáveis de membro públicas
+    GLfloat zoom;
+    glm::vec2 clickPos;
+    glm::vec2 prevClickPos;
+    glm::vec3 rotationAngles;
+    glm::mat4 model;
+    glm::mat4 proj;
+    glm::mat4 view;
 
-    glm::mat4 getProjection() const;
+    // Construtor
+    Camera(float zoom = 10.0f, const glm::vec3& rotationAngles = glm::vec3(0.0f), const glm::mat4& model = glm::mat4(1.0f), const glm::mat4& proj = glm::mat4(1.0f));
 
-    // Retorna a matriz de visualização da câmera
-    glm::mat4 getViewMatrix() const;
+    // Funções de callback
+    void mouseClickCallback(GLFWwindow* window, int button, int action, int mods);
+    void mouseMovementCallback(GLFWwindow* window, double xpos, double ypos);
+    void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
-    glm::mat4 getTableMvp() const;
-    glm::mat4 getBallMvp(const Ball& ball, const Table& table) const;
-
-    // Processa o movimento do mouse para orientar a câmera
-    void processMouseMovement(float xoffset, bool isLeftMouseButtonPressed);
-
-    // Processa o scroll do mouse para alterar o zoom da câmera
-    void processMouseScroll(float yoffset);
-
-private:
-    float zoom;
-    float angle;
+    // Função utilitária para a câmera
+    glm::mat4 getViewMatrix(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up);
+    glm::mat4 getMatrizZoom();
+    void setupCamera(const glm::vec3& position, const glm::vec3& target, float aspectRatio);
 };
 
-#endif
+#endif // CAMERA_H

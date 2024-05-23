@@ -1,79 +1,58 @@
-#include "Camera.h"
+#include "camera.h"
 
-Camera::Camera(float zoom, float angle) {
-    this->zoom = zoom;
-    this->angle = angle;
+Camera::Camera(float zoom, const glm::vec3& rotationAngles, const glm::mat4& model, const glm::mat4& proj) :
+    zoom(zoom), rotationAngles(rotationAngles), model(model), proj(proj) {
+    clickPos = glm::vec2(0.0f);
+    prevClickPos = glm::vec2(0.0f);
+    view = glm::mat4(1.0f);
 }
 
-glm::mat4 Camera::getProjection() const {
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), float(WINDOW_WIDTH) / float(WINDOW_HEIGHT), 0.1f, 100.f);
-    return projection;
+void Camera::mouseClickCallback(GLFWwindow* window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        clickPos = glm::vec2(xpos, ypos);
+        prevClickPos = clickPos;
+    }
+    else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+        rotationAngles.x = 0.0f;
+        rotationAngles.y = 0.0f;
+    }
+    model = glm::rotate(model, glm::radians(rotationAngles.y), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
-glm::mat4 Camera::getViewMatrix() const {
-    glm::mat4 view = glm::lookAt(
-        glm::vec3(0.0f, 5.0f, zoom),	// Posição da câmara no mundo
-        glm::vec3(0.0f, 0.0f, -1.0f),	// Direção para a qual a câmara esta apontada
-        glm::vec3(0.0f, 1.0f, 0.0f)		// Vector vertical
-    );
-    return view;
-}
-
-// get Mvp
-glm::mat4 Camera::getTableMvp() const {
-    glm::mat4 view = getViewMatrix();
-    glm::mat4 projection = getProjection();
-
-    glm::mat4 modelMatrix = glm::mat4(1.0f);	
-    modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, -5.0f, 0.0f));  
-    modelMatrix = glm::rotate(modelMatrix, angle, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)));
-
-    glm::mat4 mvp = projection * view * modelMatrix;
-    return mvp;
-}
-
-
-glm::mat4 Camera::getBallMvp(const Ball& ball, const Table& table) const {
- 
-    float ballYPosition = ball.getHeight() + table.getHeight() - 5.0f;
-
-    glm::mat4 view = getViewMatrix();
-    glm::mat4 projection = getProjection();
-
-    glm::mat4 modelMatrix = glm::mat4(1.0f);
-
-    modelMatrix = glm::rotate(modelMatrix, angle, glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)));
-
-    modelMatrix = glm::translate(modelMatrix, glm::vec3(ball.position.x, ballYPosition, ball.position.z));
-
-    glm::mat4 mvp = projection * view * modelMatrix;
-    return mvp;
-}
-
-
-
-void Camera::processMouseMovement(float xoffset, bool isLeftMouseButtonPressed) {
-
-    if (isLeftMouseButtonPressed) {
-        angle = xoffset / 200.0f;
+void Camera::mouseMovementCallback(GLFWwindow* window, double xpos, double ypos) {
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+        prevClickPos = clickPos;
+        clickPos = glm::vec2(xpos, ypos);
+        glm::vec2 clickDelta = clickPos - prevClickPos;
+        const float sensitivity = 0.004f;
+        rotationAngles.y += clickDelta.x * sensitivity;
     }
 }
 
-
-/**
-* \brief Função de callback para eventos de rolagem do mouse
-*
-* \param window
-* \param xoffset
-* \param yoffset
-*/
-void Camera::processMouseScroll(float yoffset) {
-    // Zoom in
-    if (yoffset == 1)
+void Camera::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+    if (yoffset == 1) {
         zoom += fabs(zoom) * 0.1f;
-
-    // Zoom out
-    else if (yoffset == -1)
+    }
+    else if (yoffset == -1) {
         zoom -= fabs(zoom) * 0.1f;
+    }
 }
 
+glm::mat4 Camera::getViewMatrix(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up) {
+    return glm::lookAt(position, target, up);
+}
+
+glm::mat4 Camera::getMatrizZoom() {
+    return glm::scale(glm::mat4(1.0f), glm::vec3(zoom));
+}
+
+void Camera::setupCamera(const glm::vec3& position, const glm::vec3& target, float aspectRatio) {
+    glm::vec3 camFront = position - target;
+    glm::vec3 camRight = glm::cross(camFront, glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::vec3 up = -glm::cross(camFront, camRight);
+
+    proj = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
+    view = getViewMatrix(position, target, up);
+}

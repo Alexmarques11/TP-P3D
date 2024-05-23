@@ -1,40 +1,56 @@
 #ifndef BALL_H
 #define BALL_H
 
-#include "Utils.h"
-#include "Material.h"
+#include <GL/glew.h> 
 #include <string>
-#include <vector>
+#include <vector>    
 #include <glm/glm.hpp>
-#include <unordered_map>
-#include <GL/glew.h>
+#include "Camera.h"
+#include "Lights.h"
 
 class Ball {
+
+private:
+
+    static const float BALL_RADIUS;
+    const float SPEED = 0.1f;
+
+    Camera* cameraPtr;
+    Lights* lightsPtr;
+
+    GLuint VAO;
+    GLuint VBO;
+    GLuint ShaderProgram;
+    GLuint textureIndex;
+
+    void LoadMTL(char* mtl_model_filepath);
+    void LoadTexture(const char* textureFileName);
+
+    // Função para verificar colisão
+    bool IsColliding(const std::vector<Ball>& balls);
+
 public:
-    Ball(const std::string& path, const glm::vec3& initialPosition);
-    ~Ball();
 
-    glm::vec3 position;
-
+    //Variaveis para os dados do ficheiro obj
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec2> uvs;
     std::vector<glm::vec3> normals;
-    std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
-    Material* currentMaterial;
 
-    GLuint vao;             // Vertex Array Object
-    GLuint vboVertices;     // Vertex Buffer Object para vértices
-    GLuint vboNormals;      // Vertex Buffer Object para normais
-    GLuint vboUVs;          // Vertex Buffer Object para UVs
-    GLuint eboIndices;      // Element Buffer Object para índices
+    glm::vec3 position;
+    glm::vec3 orientation;
+    bool isMoving;
 
-    float getHeight() const;
+    //Construtor
+    Ball(const glm::vec3& initialPosition, GLuint textureIndex, GLuint shaderProgram, Camera* camera, Lights* lights, bool isMoving = false, glm::vec3 orientation = glm::vec3(0, 0, 0));
 
-private:
-    void loadOBJ(const std::string& path);
-    void loadMTL(const std::string& path);
+    //Declarar as funções
+    void Load(const std::string obj_model_filepath);
+    void Install();
+    void Render(glm::vec3 position, glm::vec3 orientation);
+    void Update(float deltaTime, const std::vector<Ball>& balls);
 
-    void setupBuffers();
+    static std::vector<glm::vec3> GetBallInitialPositions();
 };
 
-#endif // BALL_H
+
+#endif 

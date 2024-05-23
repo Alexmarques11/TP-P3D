@@ -1,264 +1,201 @@
 ﻿#pragma comment(lib, "glew32s.lib")
 #pragma comment(lib, "glfw3.lib")
 #pragma comment(lib, "opengl32.lib")
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include <iostream>
 #include <vector>
-
-#include <Windows.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #define GLEW_STATIC
-#include <GL\glew.h>
+#include <GL/glew.h>
 
-#include <GLFW\glfw3.h>
-#include <gl\GL.h>
+#define GLFW_USE_DWM_SWAP_INTERVAL
+#include <GLFW/glfw3.h>
 
-#include "LoadShaders.h"
-#include "Utils.h"
-#include "Ball.h"
 #include "Table.h"
+#include "Ball.h"
+#include "LoadShaders.h"
 #include "Camera.h"
+#include "Lights.h"
 
-#include <glm/glm.hpp> // vec3, vec4, ivec4, mat4, ...
-#include <glm/gtc/matrix_transform.hpp> // translate, rotate, scale, perspective, ...
-#include <glm/gtc/type_ptr.hpp> // value_ptr
+// Variável para controlar a rotação da bola durante a animação
+float currentBallRotation = 0.0f;
 
+// Variáveis para criação de VAO, VBO, EBO
+GLuint VAO, VBO, EBO;
 
-Camera camera;
+// Posições das bolas de bilhar
+std::vector<glm::vec3> ballPositions = Ball::GetBallInitialPositions();
+std::vector<Ball> balls;
 
-/**
-* \brief Função para inicializar o OpenGL
-*/
-void init(void) {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Define a cor de fundo
-	glEnable(GL_DEPTH_TEST); // Habilita o teste de profundidade para renderização 3D
+// Instancias
+Camera* cameraPtr = new Camera();
+Lights* lightsPtr = new Lights();
 
-	// Descomentar para ativar o Face Culling
-	//glEnable(GL_CULL_FACE);
-}
+// Função callback para verificar se uma tecla foi pressionada
+void handleKeypress(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
+    if (action != GLFW_PRESS)
+        return;
 
-/**
-* \brief Função de callback para eventos de rolagem do mouse
-*
-* \param window
-* \param xoffset
-* \param yoffset
-*/
-void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
-	camera.processMouseScroll(yoffset);
-}
-
-
-/**
-* \brief Função de callback para eventos de movimento do cursor
-*
-* \param window
-* \param xoffset
-* \param yoffset
-*/
-void cursorPositionCallback(GLFWwindow* window, double xoffset, double yoffset) {
-
-	bool isLeftMouseButtonPressed = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
-	camera.processMouseMovement(xoffset, isLeftMouseButtonPressed);
-}
-
-
-/**
-* \brief Função para renderizar o modelo 3D na tela
-*
-* \param table
-* \param mvp
-*/
-void renderTable(Table table, glm::mat4 mvp) {
-
-	float* vertex_stream = static_cast<float*>(glm::value_ptr(table.getVertices().front()));
-	std::vector<glm::vec3> colors = table.getColors();
-
-	// Desenha quad em modo imediato
-	glBegin(GL_QUADS);
-	for (int nv = 0; nv < 6 * 4 * 3; nv += 3) {
-		// Define a cor para o vértice atual
-		glColor3f(colors[nv / (4 * 3)].r, colors[nv / (4 * 3)].g, colors[nv / (4 * 3)].b);
-		glm::vec4 vertex = glm::vec4(vertex_stream[nv], vertex_stream[nv + 1], vertex_stream[nv + 2], 1.0f);
-
-		// Cálculo das coordenadas de recorte
-		glm::vec4 transformed_vertex = mvp * vertex;
-
-		// Divisão de Perspetiva
-		glm::vec4 normalized_vertex = transformed_vertex / transformed_vertex.w;
-
-		// Desenho do vértice
-		glVertex3f(normalized_vertex.x, normalized_vertex.y, normalized_vertex.z);
-	}
-	glEnd();
-}
-
-/**
-void renderBall(Ball& ball, glm::mat4 mvp, GLuint program) {
-
-	// Ativar o programa de shader
-	glUseProgram(program);
-
-	// Passar a matriz MVP para o shader
-	GLuint mvpLocation = glGetUniformLocation(program, "mvp");
-	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvp));
-
-	// Vincular o VAO da bola
-	glBindVertexArray(ball.vao);
-
-	// Ativar e vincular a textura
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, ball.currentMaterial->diffuseTexture);
-	GLuint diffuseLocation = glGetUniformLocation(program, "diffuseTexture");
-	glUniform1i(diffuseLocation, 0);
-
-	// Desenhar a bola
-	glDrawElements(GL_TRIANGLES, ball.vertexIndices.size(), GL_UNSIGNED_INT, 0);
-
-	// Desvincular o VAO
-	glBindVertexArray(0);
-
-	// Desativar o programa de shader
-	glUseProgram(0);
-
-}*/
-
-void renderBall(const Ball& ball, glm::mat4 mvp, GLuint program) {
-	// Ativar o programa de shader
-	glUseProgram(program);
-
-	// Passar a matriz MVP para o shader
-	GLuint mvpLocation = glGetUniformLocation(program, "MVP");
-	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvp));
-
-	// Vincular o VAO da bola
-	glBindVertexArray(ball.vao);
-
-	// Ativar e vincular a textura
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, ball.currentMaterial->diffuseTexture);
-	GLuint diffuseLocation = glGetUniformLocation(program, "diffuseTexture");
-	glUniform1i(diffuseLocation, 0);
-
-	// Desenhar a bola
-	glDrawElements(GL_TRIANGLES, ball.vertexIndices.size(), GL_UNSIGNED_INT, 0);
-
-	// Desvincular o VAO
-	glBindVertexArray(0);
-
-	// Desativar o programa de shader
-	glUseProgram(0);
-}
-
-
-// Função para renderizar todas as bolas em cima da mesa
-void renderBalls(const std::vector<Ball>& balls, Table table, glm::mat4 tableMvp, GLuint program) {
-	// Ativar o programa de shader
-	glUseProgram(program);
-
-	// Passar a matriz MVP para o shader
-	GLuint mvpLocation = glGetUniformLocation(program, "MVP");
-	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(tableMvp));
-
-	// Iterar sobre todas as bolas
-	for (const auto& ball : balls) {
-		glm::mat4 ballMvp = camera.getBallMvp(ball, table);
-		renderBall(ball, ballMvp, program);
-	}
-
-	// Desativar o programa de shader
-	glUseProgram(0);
+    switch (key) {
+        case GLFW_KEY_SPACE:
+            balls[8].isMoving = true;
+            std::cout << "Ball 9 started rolling!" << std::endl;
+            break;
+        case GLFW_KEY_1:
+            lightsPtr->ToggleLight(1);
+            break;
+        case GLFW_KEY_2:
+            lightsPtr->ToggleLight(2);
+            break;
+        case GLFW_KEY_3:
+            lightsPtr->ToggleLight(3);
+            break;
+        case GLFW_KEY_4:
+            lightsPtr->ToggleLight(4);
+            break;
+        default:
+            break;
+    }
 }
 
 
 int main(void) {
-	// Inicialização do GLFW
-	if (!glfwInit()) {
-		std::cerr << "Erro ao inicializar o GLFW" << std::endl;
-		return -1;
-	}
+    // Inicializar glfw para criar uma janela
+    glfwInit();
 
-	// Criação da janela GLFW
-	GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "P3D - Trabalho Pratico", NULL, NULL);
-	if (!window) {
-		std::cerr << "Erro ao criar a janela GLFW" << std::endl;
-		glfwTerminate();
-		return -1;
-	}
+    // Glfw não sabe que versão do OpenGL estamos a usar, temos de dizer isso através de hints
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // especificamos que vamos usar a versão do OpenGL 4.6
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // especificar que OpenGL profile queremos usar
 
-	// Tornar a janela GLFW atual
-	glfwMakeContextCurrent(window);
+    // Width, height, name of the window, fullscreen ou não
+    GLFWwindow* window = glfwCreateWindow(800, 800, "PoolTable", NULL, NULL);
 
-	// Inicialização do GLEW
-	glewExperimental = GL_TRUE;
-	GLenum err = glewInit();
-	if (err != GLEW_OK) {
-		std::cerr << "Erro ao inicializar o GLEW: " << glewGetErrorString(err) << std::endl;
-		return -1;
-	}
+    if (window == NULL) {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+    }
 
-	// Inicializar o OpenGL
-	init();
+    // Usar a janela
+    glfwMakeContextCurrent(window);
 
-	// Carregar os shaders
-	ShaderInfo textureShaders[] = {
-	{ GL_VERTEX_SHADER, "Shaders/texture.vert" },
-	{ GL_FRAGMENT_SHADER, "Shaders/texture.frag" },
-	{ GL_NONE, NULL }
-	};
+    // Inicia o gestor de extensões GLEW
+    glewExperimental = GL_TRUE;
+    glewInit();
 
-	GLuint textureShaderProgram = LoadShaders(textureShaders);
-	if (textureShaderProgram == 0) {
-		std::cerr << "Erro ao carregar texture shaders" << std::endl;
-		return -1;
-	}
+    // Habilita o teste de profundidade
+    glEnable(GL_DEPTH_TEST);
 
-	ShaderInfo lightShaders[] = {
-	{ GL_VERTEX_SHADER, "Shaders/texture.vert" },
-	{ GL_FRAGMENT_SHADER, "Shaders/texture.frag" },
-	{ GL_NONE, NULL }
-	};
+    // Chamar as funções callback
+    glfwSetKeyCallback(window, handleKeypress);
+    glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) {
+        cameraPtr->mouseClickCallback(window, button, action, mods);
+        });
+    glfwSetCursorPosCallback(window, [](GLFWwindow* window, double xpos, double ypos) {
+        cameraPtr->mouseMovementCallback(window, xpos, ypos);
+        });
+    glfwSetScrollCallback(window, [](GLFWwindow* window, double xoffset, double yoffset) {
+        cameraPtr->scrollCallback(window, xoffset, yoffset);
+        });
 
-	GLuint lightShaderProgram = LoadShaders(lightShaders);
-	if (lightShaderProgram == 0) {
-		std::cerr << "Erro ao carregar light shaders" << std::endl;
-		return -1;
-	}
+    // Configurar a câmera
+    glm::vec3 cameraPosition(0.0f, 10.0f, 20.0f);
+    glm::vec3 cameraTarget(0.0f);
+    float aspectRatio = 800.0f / 800.0f;
+    cameraPtr->setupCamera(cameraPosition, cameraTarget, aspectRatio);
 
-	// Definir callbacks para eventos de input
-	glfwSetScrollCallback(window, scrollCallback);
-	glfwSetCursorPosCallback(window, cursorPositionCallback);
+    // Array de informações dos shaders para o programa das bolas
+    ShaderInfo shaders[] = {
+        { GL_VERTEX_SHADER, "Shaders/ball.vert" }, // Shader de vértice
+        { GL_FRAGMENT_SHADER, "Shaders/ball.frag" }, // Shader de fragmento
+        { GL_NONE, NULL } // Marcação de fim do array
+    };
 
-	// Carregar a mesa
-	Table table;
-	// Ball ball("PoolBalls/Ball1.obj");
+    // Carrega os shaders e cria o programa das bolas
+    GLuint shaderProgram = LoadShaders(shaders);
+    if (!shaderProgram)
+        exit(EXIT_FAILURE);
 
-	// Carregar as bolas
-	std::vector<Ball> balls;
-	for (int i = 1; i <= 15; ++i) {
-		glm::vec3 initialPosition = table.getRandomPositionOnTable();
-		std::string ballPath = "PoolBalls/Ball" + std::to_string(i) + ".obj";
-		balls.emplace_back(ballPath, initialPosition);
-	}
+    // Usa o programa das bolas para a renderização
+    glUseProgram(shaderProgram);
 
-	while (!glfwWindowShouldClose(window)) {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Array de informações dos shaders para o programa da mesa
+    ShaderInfo tableshaders[] = {
+        { GL_VERTEX_SHADER, "Shaders/table.vert" }, // Shader de vértice da mesa
+        { GL_FRAGMENT_SHADER, "Shaders/table.frag" }, // Shader de fragmento da mesa
+        { GL_NONE, NULL } // Marcação de fim do array
+    };
 
-		// MVPs
-		glm::mat4 tableMvp = camera.getTableMvp();
+    // Carrega os shaders e cria o programa da mesa
+    GLuint tableProgram = LoadShaders(tableshaders);
 
-		// Renderizar a mesa
-		renderTable(table, tableMvp);
+    // Chama a função para carregar os dados da mesa
+    Table table(tableProgram, cameraPtr, lightsPtr);
 
-		// Renderizar as bolas
-		renderBalls(balls, table, tableMvp, textureShaderProgram);
+    // Cria e carrega as bolas
+    for (int i = 0; i < ballPositions.size(); ++i) {
 
-		// Troca os buffers e verifica eventos
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-	}
+        Ball ball(ballPositions[i], i + 1, shaderProgram, cameraPtr, lightsPtr);
+        ball.Load("Ball" + std::to_string(i + 1) + ".obj");
+        ball.Install();
+        balls.push_back(ball);
+    }
 
-	glfwTerminate();
-	return 0;
+    float lastFrameTime = 0.0f;
+    while (!glfwWindowShouldClose(window)) {
+        // Define a cor de fundo para o framebuffer
+        glClearColor(0, 0, 0, 0);
+
+        // Limpar buffer de cor e profundidade
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Aplica a rotação ao modelo
+        cameraPtr->model = glm::rotate(cameraPtr->model, glm::radians(cameraPtr->rotationAngles.y), glm::vec3(0.0f, 1.0f, 0.0f));
+
+        // Matriz ZOOM
+        glm::mat4 matrizZoom = cameraPtr->getMatrizZoom();
+
+        // Bind the VAO so OpenGL knows to use it
+        glBindVertexArray(VAO);
+
+        // Dizer que programa usar (usamos o programa das bolas)
+        glUseProgram(shaderProgram);
+
+        // get delta time
+        float currentFrameTime = glfwGetTime();
+        float deltaTime = currentFrameTime - lastFrameTime;
+        lastFrameTime = currentFrameTime;
+
+        for (size_t i = 0; i < balls.size(); ++i) {
+            balls[i].Update(deltaTime, balls);
+            balls[i].Render(balls[i].position, balls[i].orientation);
+        }
+
+        // Desenhar a mesa
+        table.Render();
+
+        glfwSwapBuffers(window);
+
+        // Dizer ao glfw para processar todos os eventos
+        glfwPollEvents();
+    }
+
+    // Apaga o VAO, VBO, EBO e o programa shader
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteProgram(shaderProgram);
+
+    // Destruir a janela
+    glfwDestroyWindow(window);
+
+    glfwTerminate();
+
+    return 0;
 }

@@ -1,32 +1,28 @@
-/*****************************************************************//**
- * \file   Table.h
- * \brief  Declarações das funções e variaveis relacionadas á mesa de bilhar
- *
- * \authors André Cerqueira, Alexandre Marques, Nuno Fernandes e Tomás Carvalho
- * \date    Junho 2024
- *********************************************************************/
-
-
 #ifndef TABLE_H
 #define TABLE_H
 
-#include <vector>
+#include <GL/glew.h>
 #include <glm/glm.hpp>
-#include "Utils.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "Camera.h"
+#include "Lights.h"
 
 class Table {
 public:
-    Table();
+    Table(GLuint tableProgram, Camera* camera, Lights* lights);
     ~Table();
 
-    std::vector<glm::vec3> getVertices() const;
-    std::vector<glm::vec3> getColors() const;
-    float getHeight() const;
-    glm::vec3 getRandomPositionOnTable() const;
+    void Render();
 
 private:
-    std::vector<glm::vec3> vertices;
-    std::vector<glm::vec3> colors;
+    GLuint VAO, VBO, EBO;
+
+    GLuint tableProgram;
+    Camera* cameraPtr;
+    Lights* lightsPtr;
+
+    void Load();
 };
 
-#endif
+#endif // TABLE_H
