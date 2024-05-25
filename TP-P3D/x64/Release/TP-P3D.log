@@ -1,14 +1,19 @@
-﻿  Ball.cpp
-C:\Users\andre\source\repos\TP-P3D\TP-P3D\Ball.cpp(233,47): warning C4267: 'argumento': conversão de 'size_t' para 'GLsizei', possível perda de dados
-C:\Users\andre\source\repos\TP-P3D\TP-P3D\Ball.cpp(271,31): warning C4477: 'fscanf_s': a cadeia de formato '%s' requer um argumento do tipo 'unsigned int', mas um argumento variadic 2 tem o tipo 'size_t'
-C:\Users\andre\source\repos\TP-P3D\TP-P3D\Ball.cpp(271,31): message : esse argumento é usado como um tamanho do buffer
-C:\Users\andre\source\repos\TP-P3D\TP-P3D\Ball.cpp(293,22): warning C4477: 'fscanf_s': a cadeia de formato '%s' requer um argumento do tipo 'unsigned int', mas um argumento variadic 2 tem o tipo 'size_t'
-C:\Users\andre\source\repos\TP-P3D\TP-P3D\Ball.cpp(293,22): message : esse argumento é usado como um tamanho do buffer
+﻿  Camera.cpp
+  Lights.cpp
+  LoadShaders.cpp
+  Ball.cpp
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Ball.cpp(237,47): warning C4267: 'argumento': conversão de 'size_t' para 'GLsizei', possível perda de dados
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Ball.cpp(276,31): warning C4477: 'fscanf_s': a cadeia de formato '%s' requer um argumento do tipo 'unsigned int', mas um argumento variadic 2 tem o tipo 'size_t'
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Ball.cpp(276,31): message : esse argumento é usado como um tamanho do buffer
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Ball.cpp(298,22): warning C4477: 'fscanf_s': a cadeia de formato '%s' requer um argumento do tipo 'unsigned int', mas um argumento variadic 2 tem o tipo 'size_t'
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Ball.cpp(298,22): message : esse argumento é usado como um tamanho do buffer
+  Source.cpp
+C:\Users\andre\source\repos\TP-P3D\TP-P3D\Source.cpp(169,32): warning C4244: 'inicializando': conversão de 'double' para 'float', possível perda de dados
+  Table.cpp
+  Previous IPDB was built with incompatible compiler, fall back to full compilation.
 MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflita com uso de outras bibliotecas; use /NODEFAULTLIB:library
   Gerando código
-  0 of 667 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  All 667 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finalizada a geração de código
 glew32s.lib(glew.obj) : warning LNK4099: PDB '' não foi encontrado 'glew32s.lib(glew.obj)' ou no ''; vinculando objeto quando quando sem nenhuma informação de depuração
 LINK : warning LNK4286: o símbolo '__glewGenerateMipmap' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'

@@ -43,24 +43,24 @@ void handleKeypress(GLFWwindow* window, int key, int scancode, int action, int m
         return;
 
     switch (key) {
-        case GLFW_KEY_SPACE:
-            balls[8].isMoving = true;
-            std::cout << "Ball 9 started rolling!" << std::endl;
-            break;
-        case GLFW_KEY_1:
-            lightsPtr->ToggleLight(1);
-            break;
-        case GLFW_KEY_2:
-            lightsPtr->ToggleLight(2);
-            break;
-        case GLFW_KEY_3:
-            lightsPtr->ToggleLight(3);
-            break;
-        case GLFW_KEY_4:
-            lightsPtr->ToggleLight(4);
-            break;
-        default:
-            break;
+    case GLFW_KEY_SPACE:
+        balls[8].isMoving = true;
+        std::cout << "Ball 9 started rolling!" << std::endl;
+        break;
+    case GLFW_KEY_1:
+        lightsPtr->ToggleLight(1);
+        break;
+    case GLFW_KEY_2:
+        lightsPtr->ToggleLight(2);
+        break;
+    case GLFW_KEY_3:
+        lightsPtr->ToggleLight(3);
+        break;
+    case GLFW_KEY_4:
+        lightsPtr->ToggleLight(4);
+        break;
+    default:
+        break;
     }
 }
 
@@ -149,8 +149,6 @@ int main(void) {
 
     float lastFrameTime = 0.0f;
     while (!glfwWindowShouldClose(window)) {
-        // Define a cor de fundo para o framebuffer
-        glClearColor(0, 0, 0, 0);
 
         // Limpar buffer de cor e profundidade
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

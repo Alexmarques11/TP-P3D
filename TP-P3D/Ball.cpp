@@ -227,16 +227,21 @@ void Ball::Render(glm::vec3 position, glm::vec3 orientation) {
 
 	// Define as propriedades dos materiais
 	glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "material.emissive"), 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
+	glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "material.ambient"), 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
+	glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "material.diffuse"), 1, glm::value_ptr(glm::vec3(1.0, 1.0, 1.0)));
+	glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "material.specular"), 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
+	glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "material.shininess"), 32.0f);
 
 	glBindTexture(GL_TEXTURE_2D, textureIndex);
 
 	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 }
 
+
 void Ball::Update(float deltaTime, const std::vector<Ball>& balls) {
 
 	if (isMoving) {
-		
+
 		if (IsColliding(balls)) {
 			// Se houver colisão, pare o movimento
 			isMoving = false;
@@ -341,7 +346,7 @@ void Ball::LoadTexture(const char* textureFileName) {
 
 bool Ball::IsColliding(const std::vector<Ball>& balls) {
 	for (size_t i = 0; i < balls.size(); i++) {
-		if (&balls[i] != this) { 
+		if (&balls[i] != this) {
 			float distance = glm::distance(position, balls[i].position);
 			float minDistance = 2 * BALL_RADIUS;
 			if (distance <= minDistance) {
