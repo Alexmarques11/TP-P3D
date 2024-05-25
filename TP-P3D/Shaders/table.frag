@@ -1,4 +1,4 @@
-#version 330 core
+#version 440 core
 
 out vec4 FragColor; // outputs vec4
 
@@ -66,7 +66,7 @@ vec4 calcAmbientLight(AmbientLight light) {
     return ambient;
 }
 
-vec4 calcDirectionalLight(DirectionalLight light) {
+vec4 calcDirectionalLight(DirectionalLight light, out vec4 ambient) {
     // Cálculo da reflexão da componente da luz ambiente.
     vec4 ambient = vec4(light.ambient, 1.0);
 
@@ -87,7 +87,7 @@ vec4 calcDirectionalLight(DirectionalLight light) {
     return (ambient + diffuse + specular);
 }
 
-vec4 calcPointLight(PointLight light) {
+vec4 calcPointLight(PointLight light, out vec4 ambient) {
     // Cálculo da reflexão da componente da luz ambiente.
     vec4 ambient = vec4(light.ambient, 1.0);
 
@@ -122,7 +122,7 @@ float calcAngleBetweenVectors(vec3 N, vec3 L) {
     return angle; // O ângulo está em radianos
 }
 
-vec4 calcSpotLight(SpotLight light) {
+vec4 calcSpotLight(SpotLight light, out vec4 ambient) {
     // Cálculo da reflexão da componente da luz ambiente.
     vec4 ambient = vec4(light.ambient, 1.0);
 
@@ -158,6 +158,14 @@ vec4 calcSpotLight(SpotLight light) {
 void main() {
     FragColor = vec4(0.0f, 0.4f, 0.0f, 1.0f);
 
+    vec4 ambient;
+    vec4 light[4];
+    vec4 ambientTmp;
+
+    ambient = calcAmbientLight(ambientLight);
+    light[0] = calcDirectionalLight(directionalLight, ambientTmp);
+
+
     // Se a luz ambiente estiver ativada, adiciona sua contribuição
     if (ambientLightEnabled) {
         FragColor *= calcAmbientLight(ambientLight);
@@ -165,18 +173,27 @@ void main() {
 
     // Adiciona a contribuição da luz direcional, se estiver ativada
     if (directionalLightEnabled) {
-        FragColor += calcDirectionalLight(directionalLight);
+        light[0] = calcDirectionalLight(directionalLight, ambientTmp);
+	FragColor += light[0]
+        ambient += ambientTmp;
     }
 
     // Adiciona a contribuição das luzes pontuais, se estiverem ativadas
     for (int i = 0; i < 2; ++i) {
         if (pointLightEnabled[i]) {
-            FragColor += calcPointLight(pointLight[i]);
+            light[i+1] = calcPointLight(pointLight[i], ambientTmp);
+	    FragColor += light[i+1]
+	    ambient += ambientTmp;
         }
     }
 
     // Adiciona a contribuição da luz cônica, se estiver ativada
     if (spotLightEnabled) {
-        FragColor += calcSpotLight(spotLight);
+        light[3] = calcSpotLight(spotLight);
+	FragColor = light[3]
+	ambient += ambientTmp;
     }
+
+    FragColor = emissive + (ambient/4) + light[0] + light[1] + light[2] + light[3];
+
 }
