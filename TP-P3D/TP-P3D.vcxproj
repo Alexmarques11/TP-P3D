@@ -142,6 +142,12 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Table.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\ball.frag" />
+    <None Include="Shaders\ball.vert" />
+    <None Include="Shaders\table.frag" />
+    <None Include="Shaders\table.vert" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

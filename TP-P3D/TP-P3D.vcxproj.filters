@@ -54,4 +54,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\ball.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\ball.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\table.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\table.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
