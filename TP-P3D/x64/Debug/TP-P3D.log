@@ -1,68 +1,51 @@
 ﻿  Camera.cpp
   Lights.cpp
+  LoadShaders.cpp
+C:\Users\Utilizador\source\repos\TP-P3D\TP-P3D\LoadShaders.h(36,9): warning C4005: '_DEBUG': redefinição de macro
   Ball.cpp
-C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\LoadShaders.h(36,1): warning C4005: '_DEBUG': macro redefinition
-  (compiling source file 'Ball.cpp')
-  C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\LoadShaders.h(36,1):
-  '_DEBUG' previously declared on the command line
-  
-C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\Ball.cpp(237,45): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\Ball.cpp(276,31): warning C4477: 'fscanf_s' : format string '%s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
-  C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\Ball.cpp(276,31):
-  this argument is used as a buffer size
-  
-C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\Ball.cpp(298,22): warning C4477: 'fscanf_s' : format string '%s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
-  C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\Ball.cpp(298,22):
-  this argument is used as a buffer size
-  
+C:\Users\Utilizador\source\repos\TP-P3D\TP-P3D\LoadShaders.h(36,9): warning C4005: '_DEBUG': redefinição de macro
+C:\Users\Utilizador\source\repos\TP-P3D\TP-P3D\Ball.cpp(237,45): warning C4267: 'argumento': conversão de 'size_t' para 'GLsizei', possível perda de dados
+C:\Users\Utilizador\source\repos\TP-P3D\TP-P3D\Ball.cpp(276,31): warning C4477: 'fscanf_s': a cadeia de formato '%s' requer um argumento do tipo 'unsigned int', mas um argumento variadic 2 tem o tipo 'size_t'
+C:\Users\Utilizador\source\repos\TP-P3D\TP-P3D\Ball.cpp(298,22): warning C4477: 'fscanf_s': a cadeia de formato '%s' requer um argumento do tipo 'unsigned int', mas um argumento variadic 2 tem o tipo 'size_t'
   Source.cpp
-C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\LoadShaders.h(36,1): warning C4005: '_DEBUG': macro redefinition
-  (compiling source file 'Source.cpp')
-  C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\LoadShaders.h(36,1):
-  '_DEBUG' previously declared on the command line
-  
-C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\Source.cpp(169,32): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Utilizador\source\repos\TP-P3D\TP-P3D\LoadShaders.h(36,9): warning C4005: '_DEBUG': redefinição de macro
+C:\Users\Utilizador\source\repos\TP-P3D\TP-P3D\Source.cpp(169,32): warning C4244: 'inicializando': conversão de 'double' para 'float', possível perda de dados
   Table.cpp
-C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\LoadShaders.h(36,1): warning C4005: '_DEBUG': macro redefinition
-  (compiling source file 'Table.cpp')
-  C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\TP-P3D\LoadShaders.h(36,1):
-  '_DEBUG' previously declared on the command line
-  
-  Generating Code...
-  LINK : C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\x64\Debug\TP-P3D.exe not found or not built by the last incremental link; performing full link
-glew32s.lib(glew.obj) : warning LNK4099: PDB '' was not found with 'glew32s.lib(glew.obj)' or at ''; linking object as if no debug info
-MSVCRTD.lib(initializers.obj) : warning LNK4098: defaultlib 'msvcrt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
-MSVCRTD.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
-LINK : warning LNK4217: symbol '__glewActiveTexture' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"private: void __cdecl Ball::LoadTexture(char const *)" (?LoadTexture@Ball@@AEAAXPEBD@Z)'
-LINK : warning LNK4217: symbol '__glewBindBuffer' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
-LINK : warning LNK4286: symbol '__glewBindBuffer' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj'
-LINK : warning LNK4217: symbol '__glewBufferData' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
-LINK : warning LNK4286: symbol '__glewBufferData' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj'
-LINK : warning LNK4217: symbol '__glewGenBuffers' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: __cdecl Ball::Ball(struct glm::vec<3,float,0> const &,unsigned int,unsigned int,class Camera *,class Lights *,bool,struct glm::vec<3,float,0>)" (??0Ball@@QEAA@AEBU?$vec@$02M$0A@@glm@@IIPEAVCamera@@PEAVLights@@_NU12@@Z)'
-LINK : warning LNK4286: symbol '__glewGenBuffers' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj'
-LINK : warning LNK4217: symbol '__glewEnableVertexAttribArray' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
-LINK : warning LNK4286: symbol '__glewEnableVertexAttribArray' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj'
-LINK : warning LNK4217: symbol '__glewGetUniformLocation' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: void __cdecl Ball::Render(struct glm::vec<3,float,0>,struct glm::vec<3,float,0>)" (?Render@Ball@@QEAAXU?$vec@$02M$0A@@glm@@0@Z)'
-LINK : warning LNK4286: symbol '__glewGetUniformLocation' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj'
-LINK : warning LNK4217: symbol '__glewUniform1i' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: void __cdecl Ball::Render(struct glm::vec<3,float,0>,struct glm::vec<3,float,0>)" (?Render@Ball@@QEAAXU?$vec@$02M$0A@@glm@@0@Z)'
-LINK : warning LNK4286: symbol '__glewUniform1i' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj'
-LINK : warning LNK4217: symbol '__glewVertexAttribPointer' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
-LINK : warning LNK4286: symbol '__glewVertexAttribPointer' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj'
-LINK : warning LNK4217: symbol '__glewGenerateMipmap' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"private: void __cdecl Ball::LoadTexture(char const *)" (?LoadTexture@Ball@@AEAAXPEBD@Z)'
-LINK : warning LNK4217: symbol '__glewGetProgramResourceLocation' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
-LINK : warning LNK4286: symbol '__glewGetProgramResourceLocation' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj'
-LINK : warning LNK4217: symbol '__glewProgramUniform1f' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: void __cdecl Ball::Render(struct glm::vec<3,float,0>,struct glm::vec<3,float,0>)" (?Render@Ball@@QEAAXU?$vec@$02M$0A@@glm@@0@Z)'
-LINK : warning LNK4286: symbol '__glewProgramUniform1f' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj'
-LINK : warning LNK4217: symbol '__glewProgramUniform1i' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
-LINK : warning LNK4217: symbol '__glewProgramUniform3fv' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: void __cdecl Ball::Render(struct glm::vec<3,float,0>,struct glm::vec<3,float,0>)" (?Render@Ball@@QEAAXU?$vec@$02M$0A@@glm@@0@Z)'
-LINK : warning LNK4286: symbol '__glewProgramUniform3fv' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj'
-LINK : warning LNK4217: symbol '__glewProgramUniformMatrix4fv' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: void __cdecl Ball::Render(struct glm::vec<3,float,0>,struct glm::vec<3,float,0>)" (?Render@Ball@@QEAAXU?$vec@$02M$0A@@glm@@0@Z)'
-LINK : warning LNK4217: symbol '__glewBindVertexArray' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
-LINK : warning LNK4286: symbol '__glewBindVertexArray' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj'
-LINK : warning LNK4217: symbol '__glewGenVertexArrays' defined in 'glew32s.lib(glew.obj)' is imported by 'Ball.obj' in function '"public: __cdecl Ball::Ball(struct glm::vec<3,float,0> const &,unsigned int,unsigned int,class Camera *,class Lights *,bool,struct glm::vec<3,float,0>)" (??0Ball@@QEAA@AEBU?$vec@$02M$0A@@glm@@IIPEAVCamera@@PEAVLights@@_NU12@@Z)'
-LINK : warning LNK4286: symbol '__glewGenVertexArrays' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj'
-LINK : warning LNK4217: symbol '__glewDeleteBuffers' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj' in function '"public: __cdecl Table::~Table(void)" (??1Table@@QEAA@XZ)'
-LINK : warning LNK4217: symbol '__glewUniformMatrix4fv' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj' in function '"public: void __cdecl Table::Render(void)" (?Render@Table@@QEAAXXZ)'
-LINK : warning LNK4217: symbol '__glewUseProgram' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj' in function '"public: void __cdecl Table::Render(void)" (?Render@Table@@QEAAXXZ)'
-LINK : warning LNK4217: symbol '__glewDeleteVertexArrays' defined in 'glew32s.lib(glew.obj)' is imported by 'Table.obj' in function '"public: __cdecl Table::~Table(void)" (??1Table@@QEAA@XZ)'
-  TP-P3D.vcxproj -> C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\x64\Debug\TP-P3D.exe
+C:\Users\Utilizador\source\repos\TP-P3D\TP-P3D\LoadShaders.h(36,9): warning C4005: '_DEBUG': redefinição de macro
+  Gerando Código...
+glew32s.lib(glew.obj) : warning LNK4099: PDB '' não foi encontrado 'glew32s.lib(glew.obj)' ou no ''; vinculando objeto quando quando sem nenhuma informação de depuração
+MSVCRTD.lib(initializers.obj) : warning LNK4098: defaultlib 'msvcrt.lib' conflita com uso de outras bibliotecas; use /NODEFAULTLIB:library
+MSVCRTD.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflita com uso de outras bibliotecas; use /NODEFAULTLIB:library
+LINK : warning LNK4217: o símbolo '__glewActiveTexture' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"private: void __cdecl Ball::LoadTexture(char const *)" (?LoadTexture@Ball@@AEAAXPEBD@Z)'
+LINK : warning LNK4217: o símbolo '__glewBindBuffer' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
+LINK : warning LNK4286: o símbolo '__glewBindBuffer' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4217: o símbolo '__glewBufferData' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
+LINK : warning LNK4286: o símbolo '__glewBufferData' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4217: o símbolo '__glewGenBuffers' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: __cdecl Ball::Ball(struct glm::vec<3,float,0> const &,unsigned int,unsigned int,class Camera *,class Lights *,bool,struct glm::vec<3,float,0>)" (??0Ball@@QEAA@AEBU?$vec@$02M$0A@@glm@@IIPEAVCamera@@PEAVLights@@_NU12@@Z)'
+LINK : warning LNK4286: o símbolo '__glewGenBuffers' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4217: o símbolo '__glewEnableVertexAttribArray' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
+LINK : warning LNK4286: o símbolo '__glewEnableVertexAttribArray' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4217: o símbolo '__glewGetUniformLocation' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: void __cdecl Ball::Render(struct glm::vec<3,float,0>,struct glm::vec<3,float,0>)" (?Render@Ball@@QEAAXU?$vec@$02M$0A@@glm@@0@Z)'
+LINK : warning LNK4286: o símbolo '__glewGetUniformLocation' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4217: o símbolo '__glewUniform1i' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: void __cdecl Ball::Render(struct glm::vec<3,float,0>,struct glm::vec<3,float,0>)" (?Render@Ball@@QEAAXU?$vec@$02M$0A@@glm@@0@Z)'
+LINK : warning LNK4286: o símbolo '__glewUniform1i' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4217: o símbolo '__glewVertexAttribPointer' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
+LINK : warning LNK4286: o símbolo '__glewVertexAttribPointer' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4217: o símbolo '__glewGenerateMipmap' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"private: void __cdecl Ball::LoadTexture(char const *)" (?LoadTexture@Ball@@AEAAXPEBD@Z)'
+LINK : warning LNK4217: o símbolo '__glewGetProgramResourceLocation' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
+LINK : warning LNK4286: o símbolo '__glewGetProgramResourceLocation' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4217: o símbolo '__glewProgramUniform1f' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: void __cdecl Ball::Render(struct glm::vec<3,float,0>,struct glm::vec<3,float,0>)" (?Render@Ball@@QEAAXU?$vec@$02M$0A@@glm@@0@Z)'
+LINK : warning LNK4286: o símbolo '__glewProgramUniform1f' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4217: o símbolo '__glewProgramUniform1i' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
+LINK : warning LNK4217: o símbolo '__glewProgramUniform3fv' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: void __cdecl Ball::Render(struct glm::vec<3,float,0>,struct glm::vec<3,float,0>)" (?Render@Ball@@QEAAXU?$vec@$02M$0A@@glm@@0@Z)'
+LINK : warning LNK4286: o símbolo '__glewProgramUniform3fv' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4217: o símbolo '__glewProgramUniformMatrix4fv' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: void __cdecl Ball::Render(struct glm::vec<3,float,0>,struct glm::vec<3,float,0>)" (?Render@Ball@@QEAAXU?$vec@$02M$0A@@glm@@0@Z)'
+LINK : warning LNK4217: o símbolo '__glewBindVertexArray' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: void __cdecl Ball::Install(void)" (?Install@Ball@@QEAAXXZ)'
+LINK : warning LNK4286: o símbolo '__glewBindVertexArray' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4217: o símbolo '__glewGenVertexArrays' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj' na função '"public: __cdecl Ball::Ball(struct glm::vec<3,float,0> const &,unsigned int,unsigned int,class Camera *,class Lights *,bool,struct glm::vec<3,float,0>)" (??0Ball@@QEAA@AEBU?$vec@$02M$0A@@glm@@IIPEAVCamera@@PEAVLights@@_NU12@@Z)'
+LINK : warning LNK4286: o símbolo '__glewGenVertexArrays' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4217: o símbolo '__glewDeleteBuffers' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj' na função '"public: __cdecl Table::~Table(void)" (??1Table@@QEAA@XZ)'
+LINK : warning LNK4217: o símbolo '__glewUniformMatrix4fv' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj' na função '"public: void __cdecl Table::Render(void)" (?Render@Table@@QEAAXXZ)'
+LINK : warning LNK4217: o símbolo '__glewUseProgram' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj' na função '"public: void __cdecl Table::Render(void)" (?Render@Table@@QEAAXXZ)'
+LINK : warning LNK4217: o símbolo '__glewDeleteVertexArrays' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj' na função '"public: __cdecl Table::~Table(void)" (??1Table@@QEAA@XZ)'
+  TP-P3D.vcxproj -> C:\Users\Utilizador\source\repos\TP-P3D\x64\Debug\TP-P3D.exe

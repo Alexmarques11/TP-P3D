@@ -222,7 +222,7 @@ void Ball::Render(glm::vec3 position, glm::vec3 orientation) {
 		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.quadratic"), 0.02f);
 		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.spotCutoff"), glm::cos(glm::radians(12.5f)));
 		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.spotExponent"), 2.0f);
-		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.spotDirection"), 1, glm::value_ptr(glm::vec3(0.0f, -1.0f, 0.0f)));
+		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.spotDirection"), 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 0.2f)));
 	}
 
 	// Define as propriedades dos materiais

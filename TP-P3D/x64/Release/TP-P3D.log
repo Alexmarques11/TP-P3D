@@ -1,1 +1,29 @@
-﻿  TP-P3D.vcxproj -> C:\Users\Utilizador\Documents\Programacao\3D\TP-P3D\x64\Release\TP-P3D.exe
+﻿  Table.cpp
+MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflita com uso de outras bibliotecas; use /NODEFAULTLIB:library
+  Gerando código
+  2 of 668 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    7 functions had inline decision re-evaluated but remain unchanged
+  Finalizada a geração de código
+glew32s.lib(glew.obj) : warning LNK4099: PDB '' não foi encontrado 'glew32s.lib(glew.obj)' ou no ''; vinculando objeto quando quando sem nenhuma informação de depuração
+LINK : warning LNK4286: o símbolo '__glewGenerateMipmap' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewGenBuffers' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewProgramUniformMatrix4fv' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewProgramUniform1i' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewGenVertexArrays' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewActiveTexture' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewBufferData' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewGetUniformLocation' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewProgramUniform3fv' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewUniform1i' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewBindBuffer' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewProgramUniform1f' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewVertexAttribPointer' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewBindVertexArray' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewGetProgramResourceLocation' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewEnableVertexAttribArray' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'
+LINK : warning LNK4286: o símbolo '__glewDeleteBuffers' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4286: o símbolo '__glewUniformMatrix4fv' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4286: o símbolo '__glewDeleteVertexArrays' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+LINK : warning LNK4286: o símbolo '__glewUseProgram' definido em 'glew32s.lib(glew.obj)' é importado por 'Table.obj'
+  TP-P3D.vcxproj -> C:\Users\Utilizador\source\repos\TP-P3D\x64\Release\TP-P3D.exe
