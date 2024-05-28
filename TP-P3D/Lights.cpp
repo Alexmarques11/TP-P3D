@@ -2,7 +2,7 @@
 #include <iostream>
 
 Lights::Lights()
-    : isAmbientLightEnabled(false),
+    : isAmbientLightEnabled(true),
     isDirectionalLightEnabled(false),
     isPointLightEnabled(false),
     isSpotLightEnabled(false) {}

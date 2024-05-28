@@ -189,7 +189,7 @@ void Ball::Render(glm::vec3 position, glm::vec3 orientation) {
 
 	// Define os parâmetros da luz ambiente
 	if (lightsPtr->isAmbientLightEnabled) {
-		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "ambientLight.ambient"), 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
+		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "ambientLight.ambient"), 1, glm::value_ptr(glm::vec3(0.8, 0.8, 0.8)));
 	}
 
 	// Define os parâmetros da luz direcional
@@ -226,11 +226,10 @@ void Ball::Render(glm::vec3 position, glm::vec3 orientation) {
 	}
 
 	// Define as propriedades dos materiais
-	glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "material.emissive"), 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
-	glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "material.ambient"), 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
-	glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "material.diffuse"), 1, glm::value_ptr(glm::vec3(1.0, 1.0, 1.0)));
-	glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "material.specular"), 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
-	glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "material.shininess"), 32.0f);
+	glUniform3fv(glGetUniformLocation(ShaderProgram, "material.ambient"), 1, glm::value_ptr(ambientColor));
+	glUniform3fv(glGetUniformLocation(ShaderProgram, "material.diffuse"), 1, glm::value_ptr(diffuseColor));
+	glUniform3fv(glGetUniformLocation(ShaderProgram, "material.specular"), 1, glm::value_ptr(specularColor));
+	glUniform1f(glGetUniformLocation(ShaderProgram, "material.shininess"), shininess);
 
 	glBindTexture(GL_TEXTURE_2D, textureIndex);
 
@@ -260,7 +259,6 @@ void Ball::Update(float deltaTime, const std::vector<Ball>& balls) {
 
 //Funcao para ler um ficheiro mtl
 void Ball::LoadMTL(char* mtl_model_filepath) {
-
 	char lineHeader[128];
 
 	FILE* mtlFile;
@@ -271,26 +269,21 @@ void Ball::LoadMTL(char* mtl_model_filepath) {
 		return;
 	}
 
-	while (lineHeader[0] != EOF) {
-
+	while (true) {
 		int res = fscanf_s(mtlFile, "%s", lineHeader, sizeof(lineHeader));
 		if (res == EOF)
 			break; // EOF = End Of File. Quit the loop
 
 		if (strcmp(lineHeader, "Ka") == 0) {
-			glm::vec3 ambientColor;
 			fscanf_s(mtlFile, "%f %f %f", &ambientColor.r, &ambientColor.g, &ambientColor.b);
 		}
 		else if (strcmp(lineHeader, "Kd") == 0) {
-			glm::vec3 diffuseColor;
 			fscanf_s(mtlFile, "%f %f %f", &diffuseColor.r, &diffuseColor.g, &diffuseColor.b);
 		}
 		else if (strcmp(lineHeader, "Ks") == 0) {
-			glm::vec3 specularColor;
 			fscanf_s(mtlFile, "%f %f %f", &specularColor.r, &specularColor.g, &specularColor.b);
 		}
 		else if (strcmp(lineHeader, "Ns") == 0) {
-			float shininess;
 			fscanf_s(mtlFile, "%f", &shininess);
 		}
 		else if (strcmp(lineHeader, "map_Kd") == 0) {
@@ -300,6 +293,7 @@ void Ball::LoadMTL(char* mtl_model_filepath) {
 		}
 	}
 
+	fclose(mtlFile);
 }
 
 //Funcao para carregar uma textura

@@ -12,6 +12,11 @@ class Ball {
 
 private:
 
+    glm::vec3 ambientColor;
+    glm::vec3 diffuseColor;
+    glm::vec3 specularColor;
+    float shininess;
+
     static const float BALL_RADIUS;
     const float SPEED = 0.1f;
 
