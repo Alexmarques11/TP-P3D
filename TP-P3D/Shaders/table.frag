@@ -2,6 +2,9 @@
 
 out vec4 FragColor; // Saída da cor do fragmento
 
+in vec3 vs_normal;   // Declaração da normal do vértice
+in vec3 vs_position; // Declaração da posição do vértice
+
 uniform bool ambientLightEnabled;
 uniform bool directionalLightEnabled;
 uniform bool pointLightEnabled; // Apenas uma fonte de luz pontual
@@ -62,20 +65,23 @@ vec4 calcAmbientLight(AmbientLight light) {
 }
 
 // Função para calcular a contribuição da luz direcional
+// Função para calcular a contribuição da luz direcional
 vec4 calcDirectionalLight(DirectionalLight light, out vec4 ambientOut) {
-    ambientOut = vec4(light.ambient, 1.0) * vec4(mesaColor, 1.0);
+    ambientOut = vec4(light.ambient, 1.0) * vec4(mesaColor, 1.0); // Cálculo da luz ambiente
 
     vec3 L = normalize(-light.direction); // Direção inversa à da direção luz
-    float NdotL = max(dot(vec3(0, 1, 0), L), 0.0); // Assumindo que a normal da mesa é (0, 1, 0)
-    vec4 diffuse = vec4(light.diffuse, 1.0) * NdotL * vec4(mesaColor, 1.0);
+    float NdotL = max(dot(vs_normal, L), 0.0); // Produto escalar entre a normal e a direção da luz
+    vec4 diffuse = vec4(light.diffuse, 1.0) * NdotL * vec4(mesaColor, 1.0); // Cálculo da luz difusa
 
-    vec3 V = normalize(vec3(0, 0, 1)); // Vetor de visualização apontando para a câmera
-    vec3 R = reflect(-L, vec3(0, 1, 0)); // Vetor de reflexão
-    float RdotV = max(dot(R, V), 0.0);
-    vec4 specular = vec4(light.specular, 1.0) * pow(RdotV, 32.0); // Valor fixo para o expoente especular
+    vec3 V = normalize(-vs_position); // Vetor de visualização apontando para a câmera
+    vec3 R = reflect(-L, vs_normal); // Vetor de reflexão
+    float RdotV = max(dot(R, V), 0.0); // Produto escalar entre a reflexão e o vetor de visualização
+    vec4 specular = vec4(light.specular, 1.0) * pow(RdotV, 32.0) * vec4(mesaColor, 1.0); // Cálculo da luz especular
 
+    // Cálculo final da contribuição da luz direcional
     return (diffuse + specular);
 }
+
 
 // Função para calcular a contribuição da luz pontual
 vec4 calcPointLight(PointLight light, out vec4 ambientOut) {
