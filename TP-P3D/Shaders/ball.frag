@@ -2,92 +2,88 @@
 
 in vec3 vPositionEyeSpace;
 in vec3 vNormalEyeSpace;
-in vec2 textureCoord;  // Coordenada de textura do vértice
+in vec2 textureCoord;
 
 uniform mat4 Model;
 uniform mat4 View;
-uniform sampler2D TexSampler;  // Sampler de textura
+uniform sampler2D TexSampler;
 
 struct AmbientLight {
-    vec3 ambient;  // Componente de luz ambiente global
+    vec3 ambient;
 };
 
 struct DirectionalLight {
-    vec3 direction;  // Direção da luz, espaço do mundo
-    vec3 ambient;    // Componente de luz ambiente
-    vec3 diffuse;    // Componente de luz difusa
-    vec3 specular;   // Componente de luz especular
+    vec3 direction;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
 };
 
 struct PointLight {
-    vec3 position;   // Posição do ponto de luz, espaço do mundo
-    vec3 ambient;    // Componente de luz ambiente
-    vec3 diffuse;    // Componente de luz difusa
-    vec3 specular;   // Componente de luz especular
-    float constant;  // Coeficiente de atenuação constante
-    float linear;    // Coeficiente de atenuação linear
-    float quadratic; // Coeficiente de atenuação quadrática
+    vec3 position;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float constant;
+    float linear;
+    float quadratic;
 };
 
 struct SpotLight {
-    vec3 position;   // Posição do foco de luz, espaço do mundo
-    vec3 ambient;    // Componente de luz ambiente
-    vec3 diffuse;    // Componente de luz difusa
-    vec3 specular;   // Componente de luz especular
-    float constant;  // Coeficiente de atenuação constante
-    float linear;    // Coeficiente de atenuação linear
-    float quadratic; // Coeficiente de atenuação quadrática
-    float spotCutoff, spotExponent;
+    vec3 position;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float constant;
+    float linear;
+    float quadratic;
+    float spotCutoff;
+    float spotExponent;
     vec3 spotDirection;
 };
 
 struct Material {
     vec3 emissive;
-    vec3 ambient;   // Ka
-    vec3 specular;  // Ke
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
     float shininess;
 };
 
-uniform AmbientLight ambientLight; // Fonte de luz ambiente global
-uniform DirectionalLight directionalLight; // Fonte de luz direcional
-uniform PointLight pointLight[2]; // Duas fontes de luz pontual
-uniform SpotLight spotLight; // Fonte de luz cónica
+uniform AmbientLight ambientLight;
+uniform DirectionalLight directionalLight;
+uniform PointLight pointLight[2];
+uniform SpotLight spotLight;
 uniform Material material;
 
 uniform bool ambientLightEnabled;
 uniform bool directionalLightEnabled;
-uniform bool pointLightEnabled[2]; // Duas fontes de luz pontual
+uniform bool pointLightEnabled[2];
 uniform bool spotLightEnabled;
 
-layout (location = 0) out vec4 fColor; // Cor final do fragmento
+layout (location = 0) out vec4 fColor;
 
 vec4 calcAmbientLight(AmbientLight light);
 vec4 calcDirectionalLight(DirectionalLight light, out vec4 ambient);
 vec4 calcPointLight(PointLight light, out vec4 ambient);
-vec4 calcSpotLight(SpotLight light, out vec4 ambient);
+vec4 calcSpotLight(SpotLight light, vec3 viewDir, vec3 normal, vec3 fragPos, out vec4 ambientOut);
+
 
 vec3 diffuseColor;
 
 void main() {
-    // Cor do Material
     diffuseColor = texture(TexSampler, textureCoord).rgb;
 
-    // Cálculo da componente emissiva do material.
     vec4 emissive = vec4(material.emissive, 1.0);
-
-    // Luz Ambiente Global
     vec4 ambient = vec4(0.0);
 
-    // Cálculo do efeito da iluminação no fragmento.
     vec4 light[4];
     vec4 ambientTmp;
 
-    // Contribuição da fonte de luz ambiente
     if (ambientLightEnabled) {
         ambient += calcAmbientLight(ambientLight);
     }
 
-    // Contribuição da fonte de luz direcional
     if (directionalLightEnabled) {
         light[0] = calcDirectionalLight(directionalLight, ambientTmp);
         ambient += ambientTmp;
@@ -95,7 +91,6 @@ void main() {
         light[0] = vec4(0.0);
     }
 
-    // Contribuição de cada fonte de luz Pontual
     for (int i = 0; i < 2; ++i) {
         if (pointLightEnabled[i]) {
             light[i+1] = calcPointLight(pointLight[i], ambientTmp);
@@ -105,100 +100,102 @@ void main() {
         }
     }
 
-    // Contribuição da fonte de luz cónica
-    if (spotLightEnabled) {
-        light[3] = calcSpotLight(spotLight, ambientTmp);
-        ambient += ambientTmp;
-    } else {
-        light[3] = vec4(0.0);
-    }
+   if (spotLightEnabled) {
+    light[3] = calcSpotLight(spotLight, normalize(-vPositionEyeSpace), normalize(vNormalEyeSpace), vPositionEyeSpace, ambientTmp);
+    ambient += ambientTmp;
+} else {
+    light[3] = vec4(0.0);
+}
 
-    // Cálculo da cor final do fragmento.
+
     fColor = emissive + (ambient / 2.0) + light[0] + light[1] + light[2] + light[3];
 }
 
 vec4 calcAmbientLight(AmbientLight light) {
-    // Cálculo da contribuição da fonte de luz ambiente global, para a cor do objeto.
     return vec4(diffuseColor * light.ambient, 1.0);
 }
 
 vec4 calcDirectionalLight(DirectionalLight light, out vec4 ambient) {
-    // Cálculo da reflexão da componente da luz ambiente.
     ambient = vec4(material.ambient * light.ambient, 1.0);
 
-    // Cálculo da reflexão da componente da luz difusa.
     vec3 lightDirectionEyeSpace = (View * vec4(light.direction, 0.0)).xyz;
-    vec3 L = normalize(-lightDirectionEyeSpace); // Direção inversa à da direção luz.
+    vec3 L = normalize(-lightDirectionEyeSpace);
     vec3 N = normalize(vNormalEyeSpace);
     float NdotL = max(dot(N, L), 0.0);
     vec4 diffuse = vec4(diffuseColor * light.diffuse, 1.0) * NdotL;
 
-    // Cálculo da reflexão da componente da luz especular.
     vec3 V = normalize(-vPositionEyeSpace);
     vec3 R = reflect(-L, N);
     float RdotV = max(dot(R, V), 0.0);
     vec4 specular = pow(RdotV, material.shininess) * vec4(light.specular * material.specular, 1.0);
 
-    // Cálculo da contribuição da fonte de luz direcional para a cor final do fragmento.
     return (diffuse + specular);
 }
 
-vec4 calcPointLight(PointLight light, out vec4 ambient) {
+vec4 calcPointLight(PointLight light, out vec4 ambientOut) {
     // Cálculo da reflexão da componente da luz ambiente.
-    ambient = vec4(material.ambient * light.ambient, 1.0);
+    ambientOut = vec4(material.ambient * light.ambient, 1.0);
+
+    // Cálculo do vetor de direção da luz.
+    vec3 lightDirection = normalize(light.position - vPositionEyeSpace);
 
     // Cálculo da reflexão da componente da luz difusa.
-    vec3 lightPositionEyeSpace = (View * vec4(light.position, 1.0)).xyz;
-    vec3 L = normalize(lightPositionEyeSpace - vPositionEyeSpace);
-    vec3 N = normalize(vNormalEyeSpace);
-    float NdotL = max(dot(N, L), 0.0);
-    vec4 diffuse = vec4(diffuseColor * light.diffuse, 1.0) * NdotL;
+    float NdotL = max(dot(vNormalEyeSpace, lightDirection), 0.0);
+    vec4 diffuse = vec4(light.diffuse * NdotL, 1.0);
 
     // Cálculo da reflexão da componente da luz especular.
-    vec3 V = normalize(-vPositionEyeSpace);
-    vec3 R = reflect(-L, N);
-    float RdotV = max(dot(R, V), 0.0);
-    vec4 specular = pow(RdotV, material.shininess) * vec4(light.specular * material.specular, 1.0);
+    vec3 viewDirection = normalize(-vPositionEyeSpace);
+    vec3 reflectDirection = reflect(-lightDirection, vNormalEyeSpace);
+    float RdotV = max(dot(reflectDirection, viewDirection), 0.0);
+    vec4 specular = vec4(light.specular * pow(RdotV, material.shininess), 1.0);
 
-    // Atenuação
-    float dist = length(mat3(View) * light.position - vPositionEyeSpace); // Cálculo da distância entre o ponto de luz e o vértice
-    float attenuation = 1.0 / (light.constant + light.linear * dist + light.quadratic * (dist * dist));
+    // Attenuation
+    float distance = length(light.position - vPositionEyeSpace);
+    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
     // Cálculo da contribuição da fonte de luz pontual para a cor final do fragmento.
-    return (attenuation * (diffuse + specular));
+    vec4 lightColor = attenuation * (diffuse + specular);
+    return lightColor + ambientOut; // Adicionamos a componente da luz ambiente.
+
+    // Retornar a cor difusa da textura multiplicada pela luz difusa
+    return texture(TexSampler, textureCoord) * lightColor;
 }
 
-vec4 calcSpotLight(SpotLight light, out vec4 ambient) {
+
+
+vec4 calcSpotLight(SpotLight light, vec3 viewDir, vec3 normal, vec3 fragPos, out vec4 ambientOut) {
     // Cálculo da reflexão da componente da luz ambiente.
-    ambient = vec4(light.ambient, 1.0);
+     ambientOut = vec4(material.ambient * light.ambient, 1.0);
 
-    // Cálculo da reflexão da componente da luz difusa.
+    // Cálculo do vetor de direção da luz.
     vec3 lightPositionEyeSpace = (View * vec4(light.position, 1.0)).xyz;
-    vec3 L = normalize(lightPositionEyeSpace - vPositionEyeSpace);
-    vec3 N = normalize(vNormalEyeSpace);
-    float NdotL = max(dot(N, L), 0.0);
-    vec4 diffuse = vec4(light.diffuse, 1.0) * NdotL;
+    vec3 L = normalize(lightPositionEyeSpace - fragPos);
 
-    // Cálculo da reflexão da componente da luz especular.
-    vec3 V = normalize(-vPositionEyeSpace);
-    vec3 R = reflect(-L, N);
-    float RdotV = max(dot(R, V), 0.0);
-    vec4 specular = vec4(light.specular, 1.0) * pow(RdotV, 32.0); // Valor fixo para o expoente especular
-
-    // Atenuação
-    float dist = length(mat3(View) * light.position - vPositionEyeSpace); // Cálculo da distância entre o ponto de luz e o vértice
-    float attenuation = 1.0 / (light.constant + light.linear * dist + light.quadratic * (dist * dist));
-
-    // Cálculo do ângulo entre o vetor direção do foco e o vetor L
+    // Cálculo do ângulo entre o vetor de direção da luz (L) e o vetor de direção da spot light (D).
     float spotEffect = dot(normalize(light.spotDirection), -L);
 
-    // Verifica se está dentro do cone do foco de luz
+    // Comparação com o ângulo de abertura da spot light.
     if (spotEffect > cos(light.spotCutoff)) {
-        spotEffect = pow(spotEffect, light.spotExponent);
-    } else {
-        spotEffect = 0.0;
-    }
+        // Dentro do cone de luz da spot light.
+        // Cálculo da reflexão da componente da luz difusa.
+        float NdotL = max(dot(normal, L), 0.0);
+        vec4 diffuse = vec4(light.diffuse, 1.0) * NdotL * vec4(light.ambient, 1.0);
 
-    // Cálculo da contribuição da fonte de luz cónica para a cor final do fragmento.
-    return attenuation * spotEffect * (diffuse + specular);
+        // Cálculo da reflexão da componente da luz especular.
+        vec3 V = normalize(viewDir);
+        vec3 R = reflect(-L, normal);
+        float RdotV = max(dot(R, V), 0.0);
+        vec4 specular = vec4(light.specular, 1.0) * pow(RdotV, material.shininess) * vec4(light.ambient, 1.0);
+
+        // attenuation
+        float dist = length(lightPositionEyeSpace - fragPos);
+        float attenuation = 1.0 / (light.constant + light.linear * dist + light.quadratic * (dist * dist));
+
+        // Cálculo da contribuição da fonte de luz pontual para a cor final do fragmento.
+        return attenuation * (diffuse + specular);
+    } else {
+        // Fora do cone de luz da spot light, retorna cor preta.
+        return vec4(0.0);
+    }
 }
+

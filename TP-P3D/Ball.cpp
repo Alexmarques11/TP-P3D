@@ -149,16 +149,10 @@ void Ball::Install() {
 
 //Funcao para desenhar uma bola
 void Ball::Render(glm::vec3 position, glm::vec3 orientation) {
-
-	//Vincula o VAO
 	glBindVertexArray(VAO);
 
 	glm::mat4 Model = cameraPtr->model;
-
-	//Posicao da Bola
 	Model = glm::translate(Model, position);
-
-	//Orientação da bola
 	Model = glm::rotate(Model, glm::radians(orientation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 	Model = glm::rotate(Model, glm::radians(orientation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 	Model = glm::rotate(Model, glm::radians(orientation.z), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -173,26 +167,22 @@ void Ball::Render(glm::vec3 position, glm::vec3 orientation) {
 	glProgramUniformMatrix4fv(ShaderProgram, modelId, 1, GL_FALSE, glm::value_ptr(Model));
 
 	glm::mat4 modelView = cameraPtr->view * cameraPtr->getMatrizZoom() * Model;
-
 	GLint modelViewId = glGetProgramResourceLocation(ShaderProgram, GL_UNIFORM, "ModelView");
 	glProgramUniformMatrix4fv(ShaderProgram, modelViewId, 1, GL_FALSE, glm::value_ptr(modelView));
 
 	glm::mat3 normalMatrix = glm::inverseTranspose(glm::mat3(modelView));
-
 	GLint normalMatrixId = glGetProgramResourceLocation(ShaderProgram, GL_UNIFORM, "NormalMatrix");
-	glProgramUniformMatrix4fv(ShaderProgram, normalMatrixId, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+	glProgramUniformMatrix3fv(ShaderProgram, normalMatrixId, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
 	glUniform1i(glGetUniformLocation(ShaderProgram, "ambientLightEnabled"), lightsPtr->isAmbientLightEnabled);
 	glUniform1i(glGetUniformLocation(ShaderProgram, "directionalLightEnabled"), lightsPtr->isDirectionalLightEnabled);
 	glUniform1i(glGetUniformLocation(ShaderProgram, "pointLightEnabled[0]"), lightsPtr->isPointLightEnabled);
 	glUniform1i(glGetUniformLocation(ShaderProgram, "spotLightEnabled"), lightsPtr->isSpotLightEnabled);
 
-	// Define os parâmetros da luz ambiente
 	if (lightsPtr->isAmbientLightEnabled) {
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "ambientLight.ambient"), 1, glm::value_ptr(glm::vec3(0.8, 0.8, 0.8)));
 	}
 
-	// Define os parâmetros da luz direcional
 	if (lightsPtr->isDirectionalLightEnabled) {
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "directionalLight.direction"), 1, glm::value_ptr(glm::vec3(1.0, 0.0, 0.0)));
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "directionalLight.ambient"), 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
@@ -200,41 +190,38 @@ void Ball::Render(glm::vec3 position, glm::vec3 orientation) {
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "directionalLight.specular"), 1, glm::value_ptr(glm::vec3(1.0, 1.0, 1.0)));
 	}
 
-	// Define os parâmetros da luz pontual #1
 	if (lightsPtr->isPointLightEnabled) {
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].position"), 1, glm::value_ptr(glm::vec3(0.0, 0.0, 5.0)));
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].ambient"), 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].diffuse"), 1, glm::value_ptr(glm::vec3(1.0, 1.0, 1.0)));
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].specular"), 1, glm::value_ptr(glm::vec3(1.0, 1.0, 1.0)));
 		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].constant"), 1.0f);
-		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].linear"), 0.06f);
-		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].quadratic"), 0.02f);
+		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].linear"), 0.09f); 
+		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].quadratic"), 0.032f); 
 	}
 
-	// Define os parâmetros da luz spot
 	if (lightsPtr->isSpotLightEnabled) {
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.position"), 1, glm::value_ptr(glm::vec3(0.0, 0.0, 0.0)));
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.ambient"), 1, glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.diffuse"), 1, glm::value_ptr(glm::vec3(1.0, 1.0, 1.0)));
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.specular"), 1, glm::value_ptr(glm::vec3(1.0, 1.0, 1.0)));
 		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.constant"), 1.0f);
-		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.linear"), 0.06f);
-		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.quadratic"), 0.02f);
+		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.linear"), 0.09f); // Ajuste de atenuação
+		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.quadratic"), 0.032f); // Ajuste de atenuação
 		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.spotCutoff"), glm::cos(glm::radians(12.5f)));
 		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.spotExponent"), 2.0f);
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "spotLight.spotDirection"), 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 0.2f)));
 	}
 
-	// Define as propriedades dos materiais
 	glUniform3fv(glGetUniformLocation(ShaderProgram, "material.ambient"), 1, glm::value_ptr(ambientColor));
 	glUniform3fv(glGetUniformLocation(ShaderProgram, "material.diffuse"), 1, glm::value_ptr(diffuseColor));
 	glUniform3fv(glGetUniformLocation(ShaderProgram, "material.specular"), 1, glm::value_ptr(specularColor));
 	glUniform1f(glGetUniformLocation(ShaderProgram, "material.shininess"), shininess);
 
 	glBindTexture(GL_TEXTURE_2D, textureIndex);
-
 	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 }
+
 
 
 void Ball::Update(float deltaTime, const std::vector<Ball>& balls) {
