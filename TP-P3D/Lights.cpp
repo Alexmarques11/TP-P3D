@@ -54,8 +54,6 @@ Lights::Lights()
 	isDirectionalLightEnabled(false),
 	isPointLightEnabled(false),
 	isSpotLightEnabled(false) {
-	pointLights[0].position = glm::vec3(0.0f, 2.0f, 0.0f); // Posição da primeira luz pontual
-	pointLights[1].position = glm::vec3(0.0f, 2.0f, 0.0f); // Posição da segunda luz pontual (pode ser diferente)
 }
 
 
@@ -105,3 +103,5 @@ void Lights::ToggleLight(int key) {
 		break;
 	}
 }
+
+
