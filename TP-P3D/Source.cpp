@@ -38,6 +38,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+
 #define GLEW_STATIC
 #include <GL/glew.h>
 
@@ -231,7 +232,14 @@ int main(void) {
 		lastFrameTime = currentFrameTime;
 
 		for (size_t i = 0; i < balls.size(); ++i) {
+			GLint lightPosLoc = glGetUniformLocation(shaderProgram, "LightPos");
+			glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightsPtr->pointLights[0].position)); // Envia a posição da primeira luz pontual
+
+
 			balls[i].Update(deltaTime, balls);
+			balls[i].Render(balls[i].position, balls[i].orientation);
+			balls[i].Update(deltaTime, balls);
+
 			balls[i].Render(balls[i].position, balls[i].orientation);
 		}
 

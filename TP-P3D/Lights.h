@@ -13,6 +13,18 @@ public:
 	Lights(); // Construtor da classe Lights
 
 	void ToggleLight(int key); // Alterna o estado de uma luz com base na tecla pressionada
+
+	struct PointLight {
+		glm::vec3 position;
+		glm::vec3 ambient;
+		glm::vec3 diffuse;
+		glm::vec3 specular;
+		float constant;
+		float linear;
+		float quadratic;
+	};
+
+	PointLight pointLights[2];
 };
 
 #endif // LIGHTS_H
