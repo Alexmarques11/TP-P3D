@@ -1,18 +1,17 @@
 ﻿  Ball.cpp
-C:\Users\nunoi\Documents\GitHub\TP-P3D\TP-P3D\Ball.cpp(259,45): warning C4267: 'argumento': conversão de 'size_t' para 'GLsizei', possível perda de dados
-C:\Users\nunoi\Documents\GitHub\TP-P3D\TP-P3D\Ball.cpp(297,31): warning C4477: 'fscanf_s': a cadeia de formato '%s' requer um argumento do tipo 'unsigned int', mas um argumento variadic 2 tem o tipo 'size_t'
-C:\Users\nunoi\Documents\GitHub\TP-P3D\TP-P3D\Ball.cpp(315,22): warning C4477: 'fscanf_s': a cadeia de formato '%s' requer um argumento do tipo 'unsigned int', mas um argumento variadic 2 tem o tipo 'size_t'
+C:\Users\nunoi\Documents\GitHub\TP-P3D\TP-P3D\Ball.cpp(322,45): warning C4267: 'argumento': conversão de 'size_t' para 'GLsizei', possível perda de dados
+C:\Users\nunoi\Documents\GitHub\TP-P3D\TP-P3D\Ball.cpp(392,31): warning C4477: 'fscanf_s': a cadeia de formato '%s' requer um argumento do tipo 'unsigned int', mas um argumento variadic 2 tem o tipo 'size_t'
+C:\Users\nunoi\Documents\GitHub\TP-P3D\TP-P3D\Ball.cpp(410,22): warning C4477: 'fscanf_s': a cadeia de formato '%s' requer um argumento do tipo 'unsigned int', mas um argumento variadic 2 tem o tipo 'size_t'
   Camera.cpp
   Lights.cpp
   LoadShaders.cpp
   Source.cpp
-C:\Users\nunoi\Documents\GitHub\TP-P3D\TP-P3D\Source.cpp(197,26): warning C4244: 'inicializando': conversão de 'double' para 'float', possível perda de dados
+C:\Users\nunoi\Documents\GitHub\TP-P3D\TP-P3D\Source.cpp(229,26): warning C4244: 'inicializando': conversão de 'double' para 'float', possível perda de dados
   Table.cpp
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
 MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflita com uso de outras bibliotecas; use /NODEFAULTLIB:library
   Gerando código
-  0 of 683 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  All 683 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finalizada a geração de código
 glew32s.lib(glew.obj) : warning LNK4099: PDB '' não foi encontrado 'glew32s.lib(glew.obj)' ou no ''; vinculando objeto quando quando sem nenhuma informação de depuração
 LINK : warning LNK4286: o símbolo '__glewUniform3fv' definido em 'glew32s.lib(glew.obj)' é importado por 'Ball.obj'

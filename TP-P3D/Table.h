@@ -16,11 +16,11 @@ public:
 	void Render(); // Renderiza a mesa
 
 private:
-	GLuint VAO, VBO, EBO;  // Vertex Array Object, Vertex Buffer Object e Element Buffer Object
+	GLuint VAO, VBO, EBO; // Vertex Array Object, Vertex Buffer Object e Element Buffer Object
 
-	GLuint tableProgram;    // Programa de shader da mesa
-	Camera* cameraPtr;   // Ponteiro para a câmera
-	Lights* lightsPtr;    // Ponteiro para as luzes
+	GLuint tableProgram;  // Programa de shader da mesa
+	Camera* cameraPtr;  // Ponteiro para a câmera
+	Lights* lightsPtr;  // Ponteiro para as luzes
 
 	void Load(); // Carrega os dados da mesa (vértices, índices, etc.)
 };

@@ -30,12 +30,11 @@
  * - isMoving: Indica se a bola está em movimento.
  * - vertices, uvs, normals: Vetores que armazenam os dados do modelo 3D da bola.
  * - VAO, VBO, ShaderProgram: Variáveis para configuração e renderização da bola.
- * - cameraPtr, lightsPtr: Ponteiros para a câmera e as luzes do jogo.
+ * - cameraPtr, lightsPtr: Apontadores para a câmera e as luzes do jogo.
  *
  ******************************************************************************/
 
 
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
 #include <string>
@@ -48,11 +47,12 @@
 #include "Ball.h"
 #include "LoadShaders.h"
 
-#define GLEW_STATIC
 #include <GL/glew.h>
-
-#define GLFW_USE_DWM_SWAP_INTERVAL
 #include <GLFW/glfw3.h>
+
+#define _CRT_SECURE_NO_WARNINGS
+#define GLEW_STATIC
+#define GLFW_USE_DWM_SWAP_INTERVAL
 
 const float Ball::BALL_RADIUS = 0.035f;
 
@@ -64,7 +64,7 @@ const float Ball::BALL_RADIUS = 0.035f;
  * ----------
  * Este é o construtor da classe Ball, responsável por inicializar uma nova bola de bilhar no jogo.
  * Ele recebe como parâmetros a posição inicial da bola, o índice da textura que será aplicada,
- * o programa de shader a ser utilizado, um ponteiro para a câmera e um ponteiro para as luzes do jogo.
+ * o programa de shader a ser utilizado, um apontador para a câmera e um apontador para as luzes do jogo.
  * Além disso, também recebe parâmetros opcionais para indicar se a bola está em movimento (`isMoving`)
  * e a sua orientação (`orientation`), com valores padrão para estes.
  *
@@ -73,13 +73,13 @@ const float Ball::BALL_RADIUS = 0.035f;
  * - Nenhum (construtor).
  *
  ******************************************************************************/
-
 Ball::Ball(const glm::vec3& initialPosition, GLuint textureIndex, GLuint shaderProgram, Camera* camera, Lights* lights, bool isMoving, glm::vec3 orientation)
 	: position(initialPosition), textureIndex(textureIndex), ShaderProgram(shaderProgram), cameraPtr(camera), lightsPtr(lights), isMoving(isMoving), orientation(orientation) {
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 }
+
 
 /*****************************************************************************
  * void Ball::Load(const std::string obj_model_filepath)
@@ -176,7 +176,7 @@ void Ball::Load(const std::string obj_model_filepath) {
  * Configura os buffers (Vertex Buffer Objects - VBOs) e atributos de vértice
  * para a renderização da bola. Esta função é essencial para enviar os dados
  * do modelo da bola (vértices, normais, coordenadas de textura) para a placa
- * gráfica (GPU) de forma que ela possa processá-los e renderizar a bola na tela.
+ * gráfica (GPU) de forma que ela possa processá-los e renderizar a bola no ecrã.
  *
  * Parâmetros:
  * -----------
@@ -187,7 +187,6 @@ void Ball::Load(const std::string obj_model_filepath) {
  * - Nenhum (void).
  *
  ******************************************************************************/
-
 void Ball::Install() {
 
 	glBindVertexArray(VAO);
@@ -228,15 +227,16 @@ void Ball::Install() {
 
 }
 
+
 /*****************************************************************************
  * void Ball::Render(glm::vec3 position, glm::vec3 orientation)
  *
  * Descrição:
  * ----------
- * Esta função renderiza a bola na cena 3D, utilizando as informações de posição
+ * Esta função renderiza a bola na cena 3D, ao utilizar as informações de posição
  * e orientação fornecidas. Ela aplica as transformações de modelo, visualização e
  * projeção da câmera, configura as propriedades de iluminação e material da bola
- * e, por fim, desenha os triângulos que compõem o modelo da bola na tela.
+ * e, por fim, desenha os triângulos que compõem o modelo da bola no ecrã.
  *
  * Parâmetros:
  * -----------
@@ -248,7 +248,6 @@ void Ball::Install() {
  * - Nenhum (void).
  *
  ******************************************************************************/
-
 void Ball::Render(glm::vec3 position, glm::vec3 orientation) {
 	glBindVertexArray(VAO);
 
@@ -343,7 +342,6 @@ void Ball::Render(glm::vec3 position, glm::vec3 orientation) {
  * - Nenhum (void).
  *
  ******************************************************************************/
-
 void Ball::Update(float deltaTime, const std::vector<Ball>& balls) {
 
 	if (isMoving) {
@@ -359,6 +357,7 @@ void Ball::Update(float deltaTime, const std::vector<Ball>& balls) {
 		orientation.z -= glm::degrees(distance / BALL_RADIUS);
 	}
 }
+
 
 /*****************************************************************************
  * void Ball::LoadMTL(char* mtl_model_filepath)
@@ -416,6 +415,7 @@ void Ball::LoadMTL(char* mtl_model_filepath) {
 	fclose(mtlFile);
 }
 
+
 /*****************************************************************************
  * void Ball::LoadTexture(const char* textureFileName)
  *
@@ -423,7 +423,7 @@ void Ball::LoadMTL(char* mtl_model_filepath) {
  * ----------
  * Carrega uma textura 2D a partir de um arquivo de imagem e configura os parâmetros
  * da textura para uso na renderização da bola. A textura é carregada na memória da
- * GPU (placa gráfica) para ser utilizada no processo de renderização.
+ * GPU para ser utilizada no processo de renderização.
  *
  * Parâmetros:
  * -----------
@@ -434,7 +434,6 @@ void Ball::LoadMTL(char* mtl_model_filepath) {
  * - Nenhum (void).
  *
  ******************************************************************************/
-
 void Ball::LoadTexture(const char* textureFileName) {
 
 	glGenTextures(1, &textureIndex);
@@ -465,6 +464,26 @@ void Ball::LoadTexture(const char* textureFileName) {
 	}
 }
 
+
+/*****************************************************************************
+ * bool Ball::IsColliding(const std::vector<Ball>& balls)
+ *
+ * Descrição:
+ * ----------
+ * Esta função membro da classe `Ball` verifica se a bola está a colidir com outras
+ * bolas na mesa ou com as paredes da mesa. Ela retorna `true` se houver colisão
+ * e `false` caso contrário.
+ *
+ * Parâmetros:
+ * -----------
+ * - balls: Referência constante para o vetor de bolas na mesa.
+ *
+ * Retorno:
+ * --------
+ * - bool: `true` se a bola estiver a colidir com outra bola ou com as paredes da mesa,
+ *   `false` caso contrário.
+ *
+ ******************************************************************************/
 bool Ball::IsColliding(const std::vector<Ball>& balls) {
 	for (size_t i = 0; i < balls.size(); i++) {
 		if (&balls[i] != this) {
@@ -484,12 +503,13 @@ bool Ball::IsColliding(const std::vector<Ball>& balls) {
 	return false;
 }
 
+
 /*****************************************************************************
  * std::vector<glm::vec3> Ball::GetBallInitialPositions()
  *
  * Descrição:
  * ----------
- * Esta função estática retorna um vetor (std::vector) contendo as posições
+ * Esta função estática retorna um vetor (std::vector) que contêm as posições
  * iniciais de todas as bolas de bilhar no jogo. Cada posição é representada por
  * um vetor glm::vec3, que contém as coordenadas x, y e z da posição da bola no
  * espaço 3D.
@@ -500,10 +520,9 @@ bool Ball::IsColliding(const std::vector<Ball>& balls) {
  *
  * Retorno:
  * --------
- * - std::vector<glm::vec3>: Um vetor contendo as posições iniciais de todas as bolas.
+ * - std::vector<glm::vec3>: Um vetor que contêm as posições iniciais de todas as bolas.
  *
  ******************************************************************************/
-
 std::vector<glm::vec3> Ball::GetBallInitialPositions() {
 	std::vector<glm::vec3> ballPositions = {
 		glm::vec3(-0.5f, 0.1f, 0.2f),

@@ -16,10 +16,10 @@ Cada estrutura contém:
 
 O array de estruturas deverá terminar com o valor GL_NONE no campo 'type'.
 Exemplo:
-ShaderInfo  shaders[] = {
-  { GL_VERTEX_SHADER, "triangles.vert" },
-  { GL_FRAGMENT_SHADER, "triangles.frag" },
-  { GL_NONE, NULL }
+ShaderInfo shaders[] = {
+ { GL_VERTEX_SHADER, "triangles.vert" },
+ { GL_FRAGMENT_SHADER, "triangles.frag" },
+ { GL_NONE, NULL }
 };
 
 Retorno:
@@ -33,9 +33,9 @@ Em caso de erro, será retornado o valor zero (0).
 #define _DEBUG
 
 typedef struct {
-	GLenum     type;
+	GLenum   type;
 	const char* filename;
-	GLuint     shader;
+	GLuint   shader;
 } ShaderInfo;
 
 GLuint LoadShaders(ShaderInfo*);

@@ -50,21 +50,37 @@
 #include "Camera.h"
 #include "Lights.h"
 
- // Variável para controlar a rotação da bola durante a animação
 float currentBallRotation = 0.0f;
 
-// Variáveis para criação de VAO, VBO, EBO
 GLuint VAO, VBO, EBO;
 
-// Posições das bolas de bilhar
 std::vector<glm::vec3> ballPositions = Ball::GetBallInitialPositions();
 std::vector<Ball> balls;
 
-// Instancias
 Camera* cameraPtr = new Camera();
 Lights* lightsPtr = new Lights();
 
-// Função callback para verificar se uma tecla foi pressionada
+/*****************************************************************************
+ * void handleKeypress(GLFWwindow* window, int key, int scancode, int action, int mods)
+ *
+ * Descrição:
+ * ----------
+ * Esta é a função de callback chamada pela GLFW sempre que uma tecla é pressionada ou liberada.
+ * Ela lida com eventos específicos de teclas, como iniciar o movimento da bola 9 e alternar as luzes.
+ *
+ * Parâmetros:
+ * -----------
+ * - window: Ponteiro para a janela da GLFW onde o evento de tecla ocorreu.
+ * - key: Código da tecla pressionada ou liberada (ex: GLFW_KEY_SPACE).
+ * - scancode: Código de varredura da tecla (geralmente não utilizado).
+ * - action: A ação realizada na tecla (GLFW_PRESS, GLFW_RELEASE, GLFW_REPEAT).
+ * - mods: Bits de modificador que indica se teclas como Shift, Ctrl ou Alt estavam pressionadas.
+ *
+ * Retorno:
+ * --------
+ * - Nenhum (void).
+ *
+ ******************************************************************************/
 void handleKeypress(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
 	if (action != GLFW_PRESS)
@@ -92,17 +108,51 @@ void handleKeypress(GLFWwindow* window, int key, int scancode, int action, int m
 	}
 }
 
+/*****************************************************************************
+ * int main(void)
+ *
+ * Descrição:
+ * ----------
+ * Este é o ponto de entrada principal do programa de simulação de mesa de bilhar.
+ * O programa utiliza as bibliotecas GLFW, GLEW e GLM para criar uma janela, gerenciar
+ * o contexto OpenGL, carregar e usar shaders, e realizar operações matemáticas 3D.
+ *
+ * O programa cria uma mesa de bilhar e 16 bolas. A câmera pode ser movida ao clicar
+ * e ao arrastar com o botão esquerdo do rato, e o zoom pode ser ajustado com o scroll
+ * do rato. A barra de espaço inicia o movimento da bola 9, e as teclas 1, 2, 3 e 4
+ * alternam a luz ambiente, direcional, luz pontual e spot, respectivamente.
+ *
+ * Fluxo do Programa:
+ * 1. Inicialização:
+ *  - Inicializa GLFW e GLEW.
+ *  - Cria a janela do jogo.
+ *  - Define o contexto OpenGL.
+ *  - Habilita o teste de profundidade.
+ *  - Registra callbacks para eventos de teclado, rato e scroll.
+ *  - Configura a posição e o alvo da câmera.
+ *  - Carrega os shaders para as bolas e a mesa.
+ *  - Cria os objetos da mesa e das bolas.
+ * 2. Loop Principal:
+ *  - Enquanto a janela não for fechada:
+ *   - Limpa o buffer de cor e profundidade.
+ *   - Atualiza a matriz de modelo da câmera com base na rotação.
+ *   - Renderiza as bolas e a mesa.
+ *   - Troca os buffers da janela para mostrar o quadro renderizado.
+ *   - Processa eventos de entrada.
+ * 3. Finalização:
+ *  - Libera os recursos do OpenGL.
+ *  - Destrói a janela do jogo.
+ *  - Encerra a GLFW.
+ *
+ ******************************************************************************/
 
 int main(void) {
-	// Inicializar glfw para criar uma janela
 	glfwInit();
 
-	// Glfw não sabe que versão do OpenGL estamos a usar, temos de dizer isso através de hints
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // especificamos que vamos usar a versão do OpenGL 4.6
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // especificar que OpenGL profile queremos usar
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	// Width, height, name of the window, fullscreen ou não
 	GLFWwindow* window = glfwCreateWindow(800, 800, "PoolTable", NULL, NULL);
 
 	if (window == NULL) {
@@ -110,17 +160,13 @@ int main(void) {
 		glfwTerminate();
 	}
 
-	// Usar a janela
 	glfwMakeContextCurrent(window);
 
-	// Inicia o gestor de extensões GLEW
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-	// Habilita o teste de profundidade
 	glEnable(GL_DEPTH_TEST);
 
-	// Chamar as funções callback
 	glfwSetKeyCallback(window, handleKeypress);
 	glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) {
 		cameraPtr->mouseClickCallback(window, button, action, mods);
@@ -132,41 +178,33 @@ int main(void) {
 		cameraPtr->scrollCallback(window, xoffset, yoffset);
 		});
 
-	// Configurar a câmera
 	glm::vec3 cameraPosition(0.0f, 10.0f, 20.0f);
 	glm::vec3 cameraTarget(0.0f);
 	float aspectRatio = 800.0f / 800.0f;
 	cameraPtr->setupCamera(cameraPosition, cameraTarget, aspectRatio);
 
-	// Array de informações dos shaders para o programa das bolas
 	ShaderInfo shaders[] = {
-		{ GL_VERTEX_SHADER, "Shaders/ball.vert" }, // Shader de vértice
-		{ GL_FRAGMENT_SHADER, "Shaders/ball.frag" }, // Shader de fragmento
-		{ GL_NONE, NULL } // Marcação de fim do array
+		{ GL_VERTEX_SHADER, "Shaders/ball.vert" },
+		{ GL_FRAGMENT_SHADER, "Shaders/ball.frag" },
+		{ GL_NONE, NULL }
 	};
 
-	// Carrega os shaders e cria o programa das bolas
 	GLuint shaderProgram = LoadShaders(shaders);
 	if (!shaderProgram)
 		exit(EXIT_FAILURE);
 
-	// Usa o programa das bolas para a renderização
 	glUseProgram(shaderProgram);
 
-	// Array de informações dos shaders para o programa da mesa
 	ShaderInfo tableshaders[] = {
-		{ GL_VERTEX_SHADER, "Shaders/table.vert" }, // Shader de vértice da mesa
-		{ GL_FRAGMENT_SHADER, "Shaders/table.frag" }, // Shader de fragmento da mesa
-		{ GL_NONE, NULL } // Marcação de fim do array
+		{ GL_VERTEX_SHADER, "Shaders/table.vert" },
+		{ GL_FRAGMENT_SHADER, "Shaders/table.frag" },
+		{ GL_NONE, NULL }
 	};
 
-	// Carrega os shaders e cria o programa da mesa
 	GLuint tableProgram = LoadShaders(tableshaders);
 
-	// Chama a função para carregar os dados da mesa
 	Table table(tableProgram, cameraPtr, lightsPtr);
 
-	// Cria e carrega as bolas
 	for (int i = 0; i < ballPositions.size(); ++i) {
 
 		Ball ball(ballPositions[i], i + 1, shaderProgram, cameraPtr, lightsPtr);
@@ -178,22 +216,16 @@ int main(void) {
 	float lastFrameTime = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
 
-		// Limpar buffer de cor e profundidade
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Aplica a rotação ao modelo
 		cameraPtr->model = glm::rotate(cameraPtr->model, glm::radians(cameraPtr->rotationAngles.y), glm::vec3(0.0f, 1.0f, 0.0f));
 
-		// Matriz ZOOM
 		glm::mat4 matrizZoom = cameraPtr->getMatrizZoom();
 
-		// Bind the VAO so OpenGL knows to use it
 		glBindVertexArray(VAO);
 
-		// Dizer que programa usar (usamos o programa das bolas)
 		glUseProgram(shaderProgram);
 
-		// get delta time
 		float currentFrameTime = glfwGetTime();
 		float deltaTime = currentFrameTime - lastFrameTime;
 		lastFrameTime = currentFrameTime;
@@ -203,22 +235,18 @@ int main(void) {
 			balls[i].Render(balls[i].position, balls[i].orientation);
 		}
 
-		// Desenhar a mesa
 		table.Render();
 
 		glfwSwapBuffers(window);
 
-		// Dizer ao glfw para processar todos os eventos
 		glfwPollEvents();
 	}
 
-	// Apaga o VAO, VBO, EBO e o programa shader
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shaderProgram);
 
-	// Destruir a janela
 	glfwDestroyWindow(window);
 
 	glfwTerminate();
