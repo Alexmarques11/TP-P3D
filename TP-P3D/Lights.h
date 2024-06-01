@@ -5,15 +5,14 @@
 
 class Lights {
 public:
+	bool isAmbientLightEnabled;    // Indica se a luz ambiente está ativa
+	bool isDirectionalLightEnabled; // Indica se a luz direcional está ativa
+	bool isPointLightEnabled;      // Indica se a luz pontual está ativa
+	bool isSpotLightEnabled;       // Indica se a luz spot está ativa
 
-    bool isAmbientLightEnabled;
-    bool isDirectionalLightEnabled;
-    bool isPointLightEnabled;
-    bool isSpotLightEnabled;
+	Lights();  // Construtor da classe Lights
 
-    Lights();
-
-    void ToggleLight(int key);
+	void ToggleLight(int key); // Alterna o estado de uma luz com base na tecla pressionada
 };
 
 #endif // LIGHTS_H

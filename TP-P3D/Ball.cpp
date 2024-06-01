@@ -1,3 +1,40 @@
+/*****************************************************************************
+ * Ball.cpp
+ *
+ * Descrição:
+ * ----------
+ * Este arquivo contém a implementação da classe Ball, que representa uma bola de bilhar no jogo. A classe Ball é responsável por:
+ * - Carregar o modelo 3D da bola a partir de um arquivo .obj e .mtl.
+ * - Carregar a textura da bola.
+ * - Configurar os buffers e atributos da bola (VAO, VBO).
+ * - Renderizar a bola na cena.
+ * - Atualizar a posição e estado da bola (movimento, colisões).
+ * - Verificar colisões com outras bolas e com as paredes da mesa.
+ *
+ * Funções principais:
+ * - Ball(const glm::vec3& initialPosition, GLuint textureIndex, GLuint shaderProgram, Camera* camera, Lights* lights, bool isMoving = false, glm::vec3 orientation = glm::vec3(0, 0, 0)): Construtor da classe Ball.
+ * - Load(const std::string obj_model_filepath): Carrega o modelo 3D da bola.
+ * - LoadMTL(char* mtl_model_filepath): Carrega o material da bola.
+ * - LoadTexture(const char* textureFileName): Carrega a textura da bola.
+ * - Install(): Configura os buffers e atributos da bola.
+ * - Render(glm::vec3 position, glm::vec3 orientation): Renderiza a bola.
+ * - Update(float deltaTime, const std::vector<Ball>& balls): Atualiza a posição e estado da bola.
+ * - IsColliding(const std::vector<Ball>& balls): Verifica colisões com outras bolas.
+ * - GetBallInitialPositions(): Retorna as posições iniciais de todas as bolas.
+ *
+ * Variáveis e constantes importantes:
+ * - BALL_RADIUS: Raio da bola.
+ * - SPEED: Velocidade de movimento da bola.
+ * - position: Posição atual da bola.
+ * - orientation: Orientação da bola.
+ * - isMoving: Indica se a bola está em movimento.
+ * - vertices, uvs, normals: Vetores que armazenam os dados do modelo 3D da bola.
+ * - VAO, VBO, ShaderProgram: Variáveis para configuração e renderização da bola.
+ * - cameraPtr, lightsPtr: Ponteiros para a câmera e as luzes do jogo.
+ *
+ ******************************************************************************/
+
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
@@ -19,16 +56,49 @@
 
 const float Ball::BALL_RADIUS = 0.035f;
 
-// Construtor que recebe a posição inicial, textureIndex e shaderProgram
+/*****************************************************************************
+ * Ball::Ball(const glm::vec3& initialPosition, GLuint textureIndex, GLuint shaderProgram,
+ * Camera* camera, Lights* lights, bool isMoving = false, glm::vec3 orientation = glm::vec3(0, 0, 0))
+ *
+ * Descrição:
+ * ----------
+ * Este é o construtor da classe Ball, responsável por inicializar uma nova bola de bilhar no jogo.
+ * Ele recebe como parâmetros a posição inicial da bola, o índice da textura que será aplicada,
+ * o programa de shader a ser utilizado, um ponteiro para a câmera e um ponteiro para as luzes do jogo.
+ * Além disso, também recebe parâmetros opcionais para indicar se a bola está em movimento (`isMoving`)
+ * e a sua orientação (`orientation`), com valores padrão para estes.
+ *
+ * Retorno:
+ * --------
+ * - Nenhum (construtor).
+ *
+ ******************************************************************************/
+
 Ball::Ball(const glm::vec3& initialPosition, GLuint textureIndex, GLuint shaderProgram, Camera* camera, Lights* lights, bool isMoving, glm::vec3 orientation)
 	: position(initialPosition), textureIndex(textureIndex), ShaderProgram(shaderProgram), cameraPtr(camera), lightsPtr(lights), isMoving(isMoving), orientation(orientation) {
 
-	// Gerar o VAO e VBO
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 }
 
-//Funcao para ler os ficheiros obj
+/*****************************************************************************
+ * void Ball::Load(const std::string obj_model_filepath)
+ *
+ * Descrição:
+ * ----------
+ * Carrega o modelo 3D da bola a partir de um arquivo Wavefront OBJ (`obj_model_filepath`).
+ * O arquivo OBJ é um formato de arquivo de texto que descreve a geometria de um objeto 3D,
+ * inclui vértices, coordenadas de textura e normais.
+ *
+ * Parâmetros:
+ * -----------
+ * - obj_model_filepath: Caminho para o arquivo OBJ que contém o modelo da bola.
+ *
+ * Retorno:
+ * --------
+ * - Nenhum (void).
+ *
+ ******************************************************************************/
 void Ball::Load(const std::string obj_model_filepath) {
 	FILE* file;
 	errno_t err;
@@ -97,47 +167,58 @@ void Ball::Load(const std::string obj_model_filepath) {
 
 }
 
-//Funcao para enviar os dados
+
+/*****************************************************************************
+ * void Ball::Install()
+ *
+ * Descrição:
+ * ----------
+ * Configura os buffers (Vertex Buffer Objects - VBOs) e atributos de vértice
+ * para a renderização da bola. Esta função é essencial para enviar os dados
+ * do modelo da bola (vértices, normais, coordenadas de textura) para a placa
+ * gráfica (GPU) de forma que ela possa processá-los e renderizar a bola na tela.
+ *
+ * Parâmetros:
+ * -----------
+ * - Nenhum.
+ *
+ * Retorno:
+ * --------
+ * - Nenhum (void).
+ *
+ ******************************************************************************/
+
 void Ball::Install() {
 
-	// Vincular o VAO e VBO
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	// Aplicar uma escala para diminuir o tamanho
 	float scale = 0.040f;
 	for (size_t i = 0; i < vertices.size(); i++) {
 		vertices[i] *= scale;
 	}
 
-	//Guardar os dados no VBO
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
 
-	//Configurar os dados
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	//Criar um VBO para as normais
 	GLuint normalsVBO;
 	glGenBuffers(1, &normalsVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, normalsVBO);
 	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), normals.data(), GL_STATIC_DRAW);
 
-	// Configurar os dados
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
 
-	//Criar um VBO para as uvs
 	GLuint uvsVBO;
 	glGenBuffers(1, &uvsVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, uvsVBO);
 	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), uvs.data(), GL_STATIC_DRAW);
 
-	// Configurar os dados
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(2);
 
-	//Criar um VBO para as texturas
 	GLint textura = glGetProgramResourceLocation(ShaderProgram, GL_UNIFORM, "textSampler");
 	glProgramUniform1i(ShaderProgram, textura, 0);
 	GLenum error = glGetError();
@@ -147,7 +228,27 @@ void Ball::Install() {
 
 }
 
-//Funcao para desenhar uma bola
+/*****************************************************************************
+ * void Ball::Render(glm::vec3 position, glm::vec3 orientation)
+ *
+ * Descrição:
+ * ----------
+ * Esta função renderiza a bola na cena 3D, utilizando as informações de posição
+ * e orientação fornecidas. Ela aplica as transformações de modelo, visualização e
+ * projeção da câmera, configura as propriedades de iluminação e material da bola
+ * e, por fim, desenha os triângulos que compõem o modelo da bola na tela.
+ *
+ * Parâmetros:
+ * -----------
+ * - position: A posição (x, y, z) da bola no mundo.
+ * - orientation: A orientação (x, y, z) da bola em radianos.
+ *
+ * Retorno:
+ * --------
+ * - Nenhum (void).
+ *
+ ******************************************************************************/
+
 void Ball::Render(glm::vec3 position, glm::vec3 orientation) {
 	glBindVertexArray(VAO);
 
@@ -196,8 +297,8 @@ void Ball::Render(glm::vec3 position, glm::vec3 orientation) {
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].diffuse"), 1, glm::value_ptr(glm::vec3(1.0, 1.0, 1.0)));
 		glProgramUniform3fv(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].specular"), 1, glm::value_ptr(glm::vec3(1.0, 1.0, 1.0)));
 		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].constant"), 1.0f);
-		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].linear"), 0.09f); 
-		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].quadratic"), 0.032f); 
+		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].linear"), 0.09f);
+		glProgramUniform1f(ShaderProgram, glGetUniformLocation(ShaderProgram, "pointLight[0].quadratic"), 0.032f);
 	}
 
 	if (lightsPtr->isSpotLightEnabled) {
@@ -223,28 +324,60 @@ void Ball::Render(glm::vec3 position, glm::vec3 orientation) {
 }
 
 
+/*****************************************************************************
+ * void Ball::Update(float deltaTime, const std::vector<Ball>& balls)
+ *
+ * Descrição:
+ * ----------
+ * Esta função atualiza o estado da bola a cada quadro da simulação. Ela verifica
+ * se a bola está em movimento e, em caso afirmativo, atualiza sua posição, rotação
+ * e verifica se houve colisão com outras bolas.
+ *
+ * Parâmetros:
+ * -----------
+ * - deltaTime: Tempo decorrido desde o último quadro da simulação.
+ * - balls: Referência constante para o vetor de bolas, usado para verificar colisões.
+ *
+ * Retorno:
+ * --------
+ * - Nenhum (void).
+ *
+ ******************************************************************************/
 
 void Ball::Update(float deltaTime, const std::vector<Ball>& balls) {
 
 	if (isMoving) {
 
 		if (IsColliding(balls)) {
-			// Se houver colisão, pare o movimento
 			isMoving = false;
 		}
 
 		position.x += SPEED * deltaTime;
 
-		// Calcular a distância percorrida
 		float distance = SPEED * deltaTime;
 
-		// Atualizar a rotação da bola com base na distância percorrida
 		orientation.z -= glm::degrees(distance / BALL_RADIUS);
 	}
 }
 
-
-//Funcao para ler um ficheiro mtl
+/*****************************************************************************
+ * void Ball::LoadMTL(char* mtl_model_filepath)
+ *
+ * Descrição:
+ * ----------
+ * Carrega as propriedades do material da bola a partir de um arquivo MTL (Material Template Library).
+ * O arquivo MTL define as características visuais do material, como cor ambiente, cor difusa,
+ * cor especular, brilho e textura.
+ *
+ * Parâmetros:
+ * -----------
+ * - mtl_model_filepath: Caminho para o arquivo MTL que contém as propriedades do material da bola.
+ *
+ * Retorno:
+ * --------
+ * - Nenhum (void).
+ *
+ ******************************************************************************/
 void Ball::LoadMTL(char* mtl_model_filepath) {
 	char lineHeader[128];
 
@@ -283,41 +416,48 @@ void Ball::LoadMTL(char* mtl_model_filepath) {
 	fclose(mtlFile);
 }
 
-//Funcao para carregar uma textura
+/*****************************************************************************
+ * void Ball::LoadTexture(const char* textureFileName)
+ *
+ * Descrição:
+ * ----------
+ * Carrega uma textura 2D a partir de um arquivo de imagem e configura os parâmetros
+ * da textura para uso na renderização da bola. A textura é carregada na memória da
+ * GPU (placa gráfica) para ser utilizada no processo de renderização.
+ *
+ * Parâmetros:
+ * -----------
+ * - textureFileName: O nome do arquivo de imagem que contém a textura a ser carregada.
+ *
+ * Retorno:
+ * --------
+ * - Nenhum (void).
+ *
+ ******************************************************************************/
+
 void Ball::LoadTexture(const char* textureFileName) {
 
-	// Gera um nome de textura
 	glGenTextures(1, &textureIndex);
 
-	// Ativa a Unidade de Textura #0
-	// A Unidade de Textura 0 já está ativa por defeito.
-	// Só uma Unidade de Textura está ativa a cada momento.
 	glActiveTexture(GL_TEXTURE0);
 
-	// Vincula esse nome de textura ao target GL_TEXTURE_2D da Unidade de Textura ativa.
 	glBindTexture(GL_TEXTURE_2D, textureIndex);
 
-	// Define os parâmetros de filtragem (wrapping e ajuste de tamanho)
-	// para a textura que está vinculada ao target GL_TEXTURE_2D da Unidade de Textura ativa.
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	// Leitura/descompressão do ficheiro com imagem de textura
 	int width, height, nChannels;
-	// Ativa a inversão vertical da imagem, aquando da sua leitura para memória.
+
 	stbi_set_flip_vertically_on_load(true);
-	// Leitura da imagem para memória do CPU
+
 	unsigned char* imageData = stbi_load(textureFileName, &width, &height, &nChannels, 0);
 	if (imageData) {
-		// Carrega os dados da imagem para o Objeto de Textura vinculado ao target GL_TEXTURE_2D da Unidade de Textura ativa.
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, nChannels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, imageData);
 
-		// Gera o Mipmap para essa textura
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		// Liberta a imagem da memória do CPU
 		stbi_image_free(imageData);
 	}
 	else {
@@ -336,7 +476,6 @@ bool Ball::IsColliding(const std::vector<Ball>& balls) {
 		}
 	}
 
-	// Verificar colisão com as paredes
 	if (position.x + BALL_RADIUS > 0.9f || position.x - BALL_RADIUS < -0.9f ||
 		position.z + BALL_RADIUS > 0.45f || position.z - BALL_RADIUS < -0.45f) {
 		return true;
@@ -345,6 +484,25 @@ bool Ball::IsColliding(const std::vector<Ball>& balls) {
 	return false;
 }
 
+/*****************************************************************************
+ * std::vector<glm::vec3> Ball::GetBallInitialPositions()
+ *
+ * Descrição:
+ * ----------
+ * Esta função estática retorna um vetor (std::vector) contendo as posições
+ * iniciais de todas as bolas de bilhar no jogo. Cada posição é representada por
+ * um vetor glm::vec3, que contém as coordenadas x, y e z da posição da bola no
+ * espaço 3D.
+ *
+ * Parâmetros:
+ * -----------
+ * - Nenhum.
+ *
+ * Retorno:
+ * --------
+ * - std::vector<glm::vec3>: Um vetor contendo as posições iniciais de todas as bolas.
+ *
+ ******************************************************************************/
 
 std::vector<glm::vec3> Ball::GetBallInitialPositions() {
 	std::vector<glm::vec3> ballPositions = {

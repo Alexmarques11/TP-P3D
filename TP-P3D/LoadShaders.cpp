@@ -1,4 +1,28 @@
-﻿#pragma once
+﻿/*****************************************************************************
+ * LoadShaders.cpp
+ *
+ * Descrição:
+ * ----------
+ * Este arquivo contém a implementação das funções `ReadShader` e `LoadShaders`, que são responsáveis por:
+ * - Ler o código fonte dos shaders a partir de arquivos.
+ * - Compilar os shaders.
+ * - Criar e linkar um programa de shader, que combina os shaders de vértice e fragmento.
+ * - Retornar um identificador para o programa de shader criado.
+ *
+ * Funções principais:
+ * - ReadShader(const char* filename): Lê o código fonte de um shader a partir de um arquivo.
+ * - LoadShaders(ShaderInfo* shaders): Carrega, compila e linka os shaders, criando um programa de shader.
+ *
+ * Estruturas de dados importantes:
+ * - ShaderInfo: Estrutura que armazena informações sobre um shader (tipo, nome do arquivo e identificador do shader).
+ *
+ * Variáveis e constantes importantes:
+ * - _DEBUG: Macro que ativa o modo de depuração, exibindo mensagens de erro detalhadas.
+ *
+ ******************************************************************************/
+
+
+#pragma once
 
 #include <iostream>
 #include <fstream>

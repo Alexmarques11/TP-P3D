@@ -10,19 +10,19 @@
 
 class Table {
 public:
-    Table(GLuint tableProgram, Camera* camera, Lights* lights);
-    ~Table();
+	Table(GLuint tableProgram, Camera* camera, Lights* lights); // Construtor da mesa
+	~Table(); // Destrutor da mesa
 
-    void Render();
+	void Render(); // Renderiza a mesa
 
 private:
-    GLuint VAO, VBO, EBO;
+	GLuint VAO, VBO, EBO;  // Vertex Array Object, Vertex Buffer Object e Element Buffer Object
 
-    GLuint tableProgram;
-    Camera* cameraPtr;
-    Lights* lightsPtr;
+	GLuint tableProgram;    // Programa de shader da mesa
+	Camera* cameraPtr;   // Ponteiro para a câmera
+	Lights* lightsPtr;    // Ponteiro para as luzes
 
-    void Load();
+	void Load(); // Carrega os dados da mesa (vértices, índices, etc.)
 };
 
 #endif // TABLE_H
